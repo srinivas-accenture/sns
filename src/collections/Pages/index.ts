@@ -5,12 +5,17 @@ import { CallToActionBlock } from '@/blocks/CallToAction/config'
 import { ContentBlock } from '@/blocks/Content/config'
 import { MediaBlock } from '@/blocks/MediaBlock/config'
 import { heroField } from '@/heros/config'
+import { revalidateDelete, revalidatePage } from './hooks/revalidatePage'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', 'updatedAt'],
+  },
+  hooks: {
+    afterChange: [revalidatePage],
+    afterDelete: [revalidateDelete],
   },
   versions: {
     drafts: true,

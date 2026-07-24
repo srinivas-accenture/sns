@@ -26,6 +26,7 @@ Full-stack CMS + Next.js site. Payload CMS handles content; Next.js App Router h
 - [Frontend routing — locale-prefixed URLs](.claude/project/routing.md)
 - [Styling — Tailwind CSS v4 setup](.claude/project/styling.md)
 - [Database — migrations workflow](.claude/project/database.md)
+- [Media collection — Cloudinary integration](.claude/project/media.md)
 
 ## Critical rules (always apply)
 
