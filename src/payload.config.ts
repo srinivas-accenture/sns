@@ -7,6 +7,7 @@ import sharp from 'sharp'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
+import { Pages } from './collections/Pages'
 import { SiteSettings } from './globals/SiteSettings'
 import { DEFAULT_LANGUAGE_CODE, LANGUAGES } from './i18n/languages'
 
@@ -20,7 +21,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media],
+  collections: [Users, Media, Pages],
   globals: [SiteSettings],
   localization: {
     locales: LANGUAGES.map(({ code, label }) => ({ code, label })),

@@ -6,13 +6,33 @@ import config from '@/payload.config'
 import { RenderBlocks } from '@/components/RenderBlocks'
 import { RenderHero } from '@/components/RenderHero'
 
-export async function generateMetadata() {
+type Props = {
+  params: Promise<{ slug: string }>
+}
+
+export async function generateStaticParams() {
   const payloadConfig = await config
   const payload = await getPayload({ config: payloadConfig })
 
   const result = await payload.find({
     collection: 'pages',
-    where: { slug: { equals: 'home' } },
+    draft: false,
+    limit: 1000,
+    overrideAccess: false,
+    select: { slug: true },
+  })
+
+  return result.docs.map(({ slug }) => ({ slug }))
+}
+
+export async function generateMetadata({ params }: Props) {
+  const { slug } = await params
+  const payloadConfig = await config
+  const payload = await getPayload({ config: payloadConfig })
+
+  const result = await payload.find({
+    collection: 'pages',
+    where: { slug: { equals: slug } },
     limit: 1,
   })
 
@@ -29,13 +49,14 @@ export async function generateMetadata() {
   }
 }
 
-export default async function HomePage() {
+export default async function Page({ params }: Props) {
+  const { slug } = await params
   const payloadConfig = await config
   const payload = await getPayload({ config: payloadConfig })
 
   const result = await payload.find({
     collection: 'pages',
-    where: { slug: { equals: 'home' } },
+    where: { slug: { equals: slug } },
     limit: 1,
     draft: false,
   })
