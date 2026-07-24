@@ -207,7 +207,10 @@ export interface Page {
             } | null;
             url?: string | null;
             label: string;
-            appearance?: ('default' | 'outline') | null;
+            /**
+             * Choose how the link should be rendered.
+             */
+            appearance?: ('default' | 'outline' | 'link' | 'ghost') | null;
           };
           id?: string | null;
         }[]
@@ -244,7 +247,10 @@ export interface Page {
                     } | null;
                     url?: string | null;
                     label: string;
-                    appearance?: ('default' | 'outline') | null;
+                    /**
+                     * Choose how the link should be rendered.
+                     */
+                    appearance?: ('default' | 'outline' | 'link' | 'ghost') | null;
                   };
                   id?: string | null;
                 }[]
@@ -288,7 +294,10 @@ export interface Page {
                     } | null;
                     url?: string | null;
                     label: string;
-                    appearance?: ('default' | 'outline') | null;
+                    /**
+                     * Choose how the link should be rendered.
+                     */
+                    appearance?: ('default' | 'outline' | 'link' | 'ghost') | null;
                   };
                   id?: string | null;
                 }[]

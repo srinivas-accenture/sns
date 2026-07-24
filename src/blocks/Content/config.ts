@@ -1,7 +1,7 @@
 import type { Block } from 'payload'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 
-import { linkField } from '@/fields/link'
+import { link } from '@/fields/link'
 
 export const ContentBlock: Block = {
   slug: 'content',
@@ -34,7 +34,7 @@ export const ContentBlock: Block = {
           type: 'checkbox',
         },
         {
-          ...linkField(),
+          ...link(),
           admin: {
             condition: (_, sibling) => Boolean(sibling?.enableLink),
           },

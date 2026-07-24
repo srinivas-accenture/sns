@@ -1,7 +1,7 @@
 import type { Field } from 'payload'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 
-import { linkField } from '@/fields/link'
+import { link } from '@/fields/link'
 
 export const heroField: Field = {
   name: 'hero',
@@ -40,7 +40,7 @@ export const heroField: Field = {
       admin: {
         condition: (_, sibling) => sibling?.type !== 'none',
       },
-      fields: [linkField()],
+      fields: [link()],
     },
   ],
 }

@@ -1,7 +1,7 @@
 import type { Block } from 'payload'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 
-import { linkField } from '@/fields/link'
+import { link } from '@/fields/link'
 
 export const CallToActionBlock: Block = {
   slug: 'cta',
@@ -16,7 +16,7 @@ export const CallToActionBlock: Block = {
     {
       name: 'links',
       type: 'array',
-      fields: [linkField()],
+      fields: [link()],
     },
   ],
 }
