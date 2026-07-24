@@ -1,0 +1,1734 @@
+/* ============================================================
+   MASTER LAYOUT CSS
+   Full-page responsive design system — XL → mobile
+   Breakpoints (from tailwind.config):
+     2xl  86rem  / 1376px
+     xl   80rem  / 1280px
+     lg   64rem  / 1024px
+     md   48rem  /  768px
+     sm   40rem  /  640px
+     xs   custom /  360px
+   ============================================================ */
+
+/* ────────────────────────────────────────────────────────────
+   1. LAYOUT TOKENS
+   ──────────────────────────────────────────────────────────── */
+:root {
+  /* Header height — matches h-16 in Header/Component.client.tsx */
+  --header-height: 4rem;
+
+  /* Max content widths */
+  --width-narrow: 48rem; /* 768px  — long-form text, forms */
+  --width-content: 64rem; /* 1024px — standard content */
+  --width-wide: 80rem; /* 1280px — wide sections */
+  --width-full: 86rem; /* 1376px — max-width cap */
+
+  /* Section vertical padding — fluid */
+  --section-padding-y: clamp(3rem, 6vw, 7rem);
+  --section-padding-y-sm: clamp(2rem, 4vw, 4rem);
+  --section-padding-y-lg: clamp(5rem, 9vw, 10rem);
+
+  /* Horizontal gutter inside container */
+  --gutter-x: clamp(1rem, 4vw, 2rem);
+
+  /* Block-level spacing (between elements within a section) */
+  --space-1: clamp(0.25rem, 0.5vw, 0.5rem);
+  --space-2: clamp(0.5rem, 1vw, 0.75rem);
+  --space-3: clamp(0.75rem, 1.5vw, 1rem);
+  --space-4: clamp(1rem, 2vw, 1.5rem);
+  --space-6: clamp(1.5rem, 3vw, 2.5rem);
+  --space-8: clamp(2rem, 4vw, 3.5rem);
+  --space-12: clamp(3rem, 6vw, 6rem);
+  --space-16: clamp(4rem, 8vw, 8rem);
+
+  /* Card gap */
+  --grid-gap: clamp(1rem, 2.5vw, 1.75rem);
+
+  /* Border radius */
+  --radius-card: 0.75rem;
+  --radius-btn: 100px;
+
+  /* Shadow scale */
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.08);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.08);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.08);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.08), 0 8px 10px -6px rgb(0 0 0 / 0.08);
+  --shadow-float: 0 8px 30px rgb(0 0 0 / 0.12);
+
+  /* Easing tokens (Emil Kowalski / animations.dev) */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* ────────────────────────────────────────────────────────────
+   2. FLUID TYPOGRAPHY
+   Uses clamp(min, preferred, max) so fonts scale between
+   the smallest and largest viewport without breakpoints.
+   ──────────────────────────────────────────────────────────── */
+:root {
+  --text-xs: clamp(0.7rem, 0.65rem + 0.25vw, 0.75rem);
+  --text-sm: clamp(0.813rem, 0.75rem + 0.32vw, 0.875rem);
+  --text-base: clamp(0.938rem, 0.875rem + 0.32vw, 1rem);
+  --text-lg: clamp(1.063rem, 0.975rem + 0.44vw, 1.125rem);
+  --text-xl: clamp(1.188rem, 1.05rem + 0.69vw, 1.25rem);
+  --text-2xl: clamp(1.313rem, 1.1rem + 1.06vw, 1.5rem);
+  --text-3xl: clamp(1.625rem, 1.25rem + 1.88vw, 1.875rem);
+  --text-4xl: clamp(2rem, 1.5rem + 2.5vw, 2.5rem);
+  --text-5xl: clamp(2.375rem, 1.7rem + 3.38vw, 3rem);
+  --text-6xl: clamp(2.75rem, 1.9rem + 4.25vw, 3.75rem);
+  --text-7xl: clamp(3.25rem, 2.25rem + 5vw, 4.5rem);
+
+  /* Line-height tokens */
+  --leading-tight: 1.15;
+  --leading-snug: 1.35;
+  --leading-normal: 1.6;
+  --leading-loose: 1.8;
+
+  /* Letter spacing */
+  --tracking-tight: -0.025em;
+  --tracking-normal: 0em;
+  --tracking-wide: 0.025em;
+  --tracking-widest: 0.1em;
+}
+
+/* Apply fluid type to headings globally */
+h1 {
+  font-size: var(--text-5xl);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  font-optical-sizing: auto;
+}
+h2 {
+  font-size: var(--text-4xl);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  font-optical-sizing: auto;
+}
+h3 {
+  font-size: var(--text-3xl);
+  line-height: var(--leading-snug);
+  font-optical-sizing: auto;
+}
+h4 {
+  font-size: var(--text-2xl);
+  line-height: var(--leading-snug);
+  font-optical-sizing: auto;
+}
+h5 {
+  font-size: var(--text-xl);
+  line-height: var(--leading-normal);
+  font-optical-sizing: auto;
+}
+h6 {
+  font-size: var(--text-lg);
+  line-height: var(--leading-normal);
+  font-optical-sizing: auto;
+}
+p,
+li,
+td,
+th {
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+}
+small,
+.text-sm {
+  font-size: var(--text-sm);
+}
+.text-xs {
+  font-size: var(--text-xs);
+}
+
+/* ────────────────────────────────────────────────────────────
+   3. BASE / RESET EXTENSIONS
+   ──────────────────────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100dvh;
+  overflow-x: hidden;
+  font-size: var(--text-base);
+}
+
+/* Better box model */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Remove default list styles when inside nav */
+nav ul,
+nav ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Responsive media */
+img,
+video,
+svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Text selection */
+::selection {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+/* Focus visible — keyboard only */
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+/* Remove focus outline for mouse users */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ────────────────────────────────────────────────────────────
+   4. PAGE SHELL
+   Full-height flex column: header → main → footer
+   ──────────────────────────────────────────────────────────── */
+
+/* Sticky header offset so anchors don't hide under it */
+:target {
+  scroll-margin-top: calc(var(--header-height) + 1.5rem);
+}
+
+/* Main content grows to fill available space */
+main,
+.site-main {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ────────────────────────────────────────────────────────────
+   5. CONTAINER VARIANTS
+   Extends the Tailwind .container defined in globals.css
+   ──────────────────────────────────────────────────────────── */
+
+/* Narrow — for prose, forms, focused content */
+.container-narrow {
+  width: 100%;
+  max-width: var(--width-narrow);
+  margin-inline: auto;
+  padding-inline: var(--gutter-x);
+}
+
+/* Wide — for hero-level full bleeds that still need a cap */
+.container-wide {
+  width: 100%;
+  max-width: var(--width-wide);
+  margin-inline: auto;
+  padding-inline: var(--gutter-x);
+}
+
+/* Full — 100% with only gutter padding, no max-width */
+.container-full {
+  width: 100%;
+  padding-inline: var(--gutter-x);
+}
+
+/* ────────────────────────────────────────────────────────────
+   6. SECTIONS
+   ──────────────────────────────────────────────────────────── */
+.section {
+  padding-block: var(--section-padding-y);
+}
+
+.section-sm {
+  padding-block: var(--section-padding-y-sm);
+}
+
+.section-lg {
+  padding-block: var(--section-padding-y-lg);
+}
+
+/* Full-viewport hero */
+.section-hero {
+  min-height: 100dvh;
+  min-height: 100svh; /* Safari fallback */
+  display: flex;
+  align-items: center;
+  padding-block: var(--section-padding-y);
+}
+
+/* Hero minus header */
+.section-hero-offset {
+  min-height: calc(100dvh - var(--header-height));
+  display: flex;
+  align-items: center;
+  padding-block: var(--section-padding-y-sm);
+}
+
+/* Tall but not full-vh */
+.section-tall {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  padding-block: var(--section-padding-y);
+}
+
+/* Background variants */
+.section-muted {
+  background-color: var(--muted);
+}
+.section-card {
+  background-color: var(--card);
+}
+.section-primary {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+/* Full-bleed background but content stays in container */
+.section-bleed {
+  position: relative;
+  padding-inline: 0;
+}
+
+/* ────────────────────────────────────────────────────────────
+   7. RESPONSIVE GRID LAYOUTS
+   ──────────────────────────────────────────────────────────── */
+
+/* Auto-responsive grid — items go to 1 col on small screens */
+.grid-2 {
+  display: grid;
+  gap: var(--grid-gap);
+  grid-template-columns: 1fr;
+}
+
+.grid-3 {
+  display: grid;
+  gap: var(--grid-gap);
+  grid-template-columns: 1fr;
+}
+
+.grid-4 {
+  display: grid;
+  gap: var(--grid-gap);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 40rem) {
+  .grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 48rem) {
+  .grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 64rem) {
+  .grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Content + sidebar */
+.grid-sidebar {
+  display: grid;
+  gap: var(--grid-gap);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 64rem) {
+  .grid-sidebar {
+    grid-template-columns: 1fr 320px;
+  }
+  .grid-sidebar-left {
+    grid-template-columns: 320px 1fr;
+  }
+}
+
+/* Full 12-column grid (manual column placement) */
+.grid-12 {
+  display: grid;
+  gap: var(--grid-gap);
+  grid-template-columns: repeat(4, 1fr);
+}
+
+@media (min-width: 48rem) {
+  .grid-12 {
+    grid-template-columns: repeat(8, 1fr);
+  }
+}
+
+@media (min-width: 64rem) {
+  .grid-12 {
+    grid-template-columns: repeat(12, 1fr);
+  }
+}
+
+/* Masonry (CSS-only) */
+.grid-masonry {
+  columns: 1;
+  gap: var(--grid-gap);
+}
+
+@media (min-width: 40rem) {
+  .grid-masonry {
+    columns: 2;
+  }
+}
+@media (min-width: 64rem) {
+  .grid-masonry {
+    columns: 3;
+  }
+}
+
+.grid-masonry > * {
+  break-inside: avoid;
+  margin-bottom: var(--grid-gap);
+}
+
+/* ────────────────────────────────────────────────────────────
+   8. FLEX UTILITIES
+   ──────────────────────────────────────────────────────────── */
+
+/* Stack that switches to row at md */
+.stack-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--grid-gap);
+}
+
+@media (min-width: 48rem) {
+  .stack-row {
+    flex-direction: row;
+  }
+}
+
+/* Center everything */
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Space between at md+ */
+.flex-between {
+  display: flex;
+  flex-direction: column;
+  gap: var(--grid-gap);
+}
+
+@media (min-width: 48rem) {
+  .flex-between {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+/* ────────────────────────────────────────────────────────────
+   9. TYPOGRAPHY UTILITIES
+   ──────────────────────────────────────────────────────────── */
+
+/* Balanced heading wrap */
+.text-balance {
+  text-wrap: balance;
+}
+.text-pretty {
+  text-wrap: pretty;
+}
+
+/* Section header group */
+.section-header {
+  max-width: var(--width-narrow);
+  margin-inline: auto;
+  text-align: center;
+  margin-bottom: var(--space-12);
+}
+
+.section-header .eyebrow {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--color-primary);
+  margin-bottom: var(--space-3);
+}
+
+.section-header h2 {
+  margin-bottom: var(--space-4);
+}
+
+.section-header p {
+  font-size: var(--text-lg);
+  color: var(--color-muted-foreground);
+  line-height: var(--leading-loose);
+}
+
+/* Multi-line clamp */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Prose width cap */
+.prose-narrow {
+  max-width: 65ch;
+}
+
+/* ────────────────────────────────────────────────────────────
+   10. ASPECT RATIOS
+   ──────────────────────────────────────────────────────────── */
+.aspect-hero {
+  aspect-ratio: 16 / 7;
+}
+.aspect-card {
+  aspect-ratio: 4 / 3;
+}
+.aspect-square {
+  aspect-ratio: 1 / 1;
+}
+.aspect-portrait {
+  aspect-ratio: 3 / 4;
+}
+.aspect-cinema {
+  aspect-ratio: 21 / 9;
+}
+
+/* Image fit helpers */
+.img-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.img-contain {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* ────────────────────────────────────────────────────────────
+   11. CARD COMPONENT
+   ──────────────────────────────────────────────────────────── */
+.card {
+  background-color: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition:
+    box-shadow 0.2s var(--ease-out),
+    transform 0.2s var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card:hover {
+    box-shadow: var(--shadow-md);
+  }
+
+  .card-interactive:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+}
+
+.card-body {
+  padding: var(--space-6);
+}
+
+.card-media {
+  overflow: hidden;
+}
+
+.card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card:hover .card-media img {
+    transform: scale(1.04);
+  }
+}
+
+/* ────────────────────────────────────────────────────────────
+   12. BUTTON SYSTEM
+   ──────────────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.5rem;
+  border-radius: var(--radius-btn);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition:
+    background-color 0.15s,
+    border-color 0.15s,
+    color 0.15s,
+    box-shadow 0.15s;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
+  border-color: var(--color-primary);
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+  box-shadow: var(--shadow-md);
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.btn-outline:hover {
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
+}
+
+.btn-ghost {
+  background-color: transparent;
+  color: var(--color-foreground);
+  border-color: transparent;
+}
+
+.btn-ghost:hover {
+  background-color: var(--color-muted);
+}
+
+/* Sizes */
+.btn-sm {
+  padding: 0.375rem 1rem;
+  font-size: var(--text-xs);
+}
+
+.btn-lg {
+  padding: 0.875rem 2rem;
+  font-size: var(--text-base);
+}
+
+.btn-xl {
+  padding: 1rem 2.5rem;
+  font-size: var(--text-lg);
+}
+
+/* Icon-only round button */
+.btn-icon {
+  padding: 0.625rem;
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+/* ────────────────────────────────────────────────────────────
+   13. FORM ELEMENTS
+   ──────────────────────────────────────────────────────────── */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.form-label {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-foreground);
+}
+
+.form-input,
+.form-textarea,
+.form-select {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  border: 1px solid var(--color-border);
+  border-radius: calc(var(--radius-card) - 0.125rem);
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+  appearance: none;
+}
+
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px oklch(from var(--color-primary) l c h / 0.15);
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: var(--color-muted-foreground);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 7rem;
+}
+
+.form-hint {
+  font-size: var(--text-xs);
+  color: var(--color-muted-foreground);
+}
+
+.form-error-msg {
+  font-size: var(--text-xs);
+  color: var(--color-destructive);
+}
+
+/* ────────────────────────────────────────────────────────────
+   14. DIVIDER
+   ──────────────────────────────────────────────────────────── */
+.divider {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin-block: var(--space-8);
+}
+
+.divider-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-block: var(--space-8);
+  color: var(--color-muted-foreground);
+  font-size: var(--text-sm);
+}
+
+.divider-label::before,
+.divider-label::after {
+  content: '';
+  flex: 1;
+  border-top: 1px solid var(--color-border);
+}
+
+/* ────────────────────────────────────────────────────────────
+   15. BADGE / TAG
+   ──────────────────────────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2em 0.65em;
+  border-radius: 100px;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.badge-primary {
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
+}
+.badge-muted {
+  background-color: var(--color-muted);
+  color: var(--color-muted-foreground);
+}
+.badge-success {
+  background-color: var(--color-success);
+  color: var(--color-foreground);
+}
+.badge-warning {
+  background-color: var(--color-warning);
+  color: var(--color-foreground);
+}
+.badge-error {
+  background-color: var(--color-error);
+  color: white;
+}
+
+/* ────────────────────────────────────────────────────────────
+   16. NAVIGATION HELPERS
+   ──────────────────────────────────────────────────────────── */
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-muted-foreground);
+  text-decoration: none;
+  padding: 0.375rem 0.5rem;
+  border-radius: 0.375rem;
+  transition:
+    color 0.15s,
+    background-color 0.15s;
+}
+
+.nav-link:hover,
+.nav-link[aria-current='page'] {
+  color: var(--color-foreground);
+  background-color: var(--color-muted);
+}
+
+/* ────────────────────────────────────────────────────────────
+   17. OVERLAY / SCRIM
+   ──────────────────────────────────────────────────────────── */
+.overlay-dark {
+  background: linear-gradient(to top, rgb(0 0 0 / 0.7) 0%, rgb(0 0 0 / 0) 60%);
+}
+.overlay-light {
+  background: linear-gradient(to top, rgb(255 255 255 / 0.8) 0%, transparent 60%);
+}
+.overlay-full {
+  background: rgb(0 0 0 / 0.45);
+}
+
+/* ────────────────────────────────────────────────────────────
+   18. SKELETON LOADERS
+   ──────────────────────────────────────────────────────────── */
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-muted) 25%,
+    var(--color-border) 50%,
+    var(--color-muted) 75%
+  );
+  background-size: 800px 100%;
+  animation: skeleton-shimmer 1.4s infinite linear;
+  border-radius: 0.375rem;
+}
+
+/* ────────────────────────────────────────────────────────────
+   19. SCROLL ANIMATIONS
+   Fade-in on scroll using IntersectionObserver (JS) or
+   pure CSS animation-timeline where supported.
+   ──────────────────────────────────────────────────────────── */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-2rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(2rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ── CMS-configurable colour sections ───────────────────────────────────────
+   Components set --cms-bg via a CSS custom-property inline style.
+   The property itself lives here so no CSS properties appear in JSX.        */
+.cms-bg {
+  background-color: var(--cms-bg, var(--section-bg, transparent));
+}
+
+/* ────────────────────────────────────────────────────────────────────────── */
+
+/* Classes toggled by JS IntersectionObserver */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(1.5rem);
+  transition:
+    opacity 0.55s ease,
+    transform 0.55s ease;
+}
+
+.animate-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.animate-delay-1 {
+  transition-delay: 0.1s;
+}
+.animate-delay-2 {
+  transition-delay: 0.2s;
+}
+.animate-delay-3 {
+  transition-delay: 0.3s;
+}
+.animate-delay-4 {
+  transition-delay: 0.4s;
+}
+
+/* ────────────────────────────────────────────────────────────
+   20. REDUCED MOTION
+   ──────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-on-scroll {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ────────────────────────────────────────────────────────────
+   21. SCROLLBAR STYLING (Webkit)
+   ──────────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-muted);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 100px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-muted-foreground);
+}
+
+/* ────────────────────────────────────────────────────────────
+   26. HERO SLIDER
+   ──────────────────────────────────────────────────────────── */
+
+/* Full-viewport slide frame — 100svh avoids mobile browser-chrome shift */
+.hero-slide-frame {
+  position: relative; /* required for fill-mode Next.js Image */
+  height: 100vh;
+  height: 100svh;
+  min-height: 600px;
+  overflow: hidden;
+}
+
+/* Slide track: position driven by --slide-index custom property set in JSX */
+.hero-slide-track {
+  transform: translateX(calc(var(--slide-index, 0) * -100%));
+  transition: transform 700ms cubic-bezier(0.77, 0, 0.18, 1);
+}
+
+/* Autoplay progress fill: width driven by --progress custom property */
+.hero-progress-fill {
+  width: var(--progress, 0%);
+  transition: width 50ms linear;
+}
+
+/* Hero heading — larger than standard h1/h2 global sizes */
+.hero-heading {
+  font-size: clamp(2rem, 1.25rem + 4vw, 4.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.45);
+}
+
+/* Hero description text */
+.hero-description {
+  font-size: clamp(1rem, 0.875rem + 0.6vw, 1.25rem);
+  line-height: 1.65;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+}
+
+/* Content entrance animation — fires on each slide mount */
+.hero-slide-content {
+  animation: hero-content-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes hero-content-in {
+  from {
+    opacity: 0;
+    transform: translateY(1.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Scroll indicator delayed reveal */
+.hero-scroll-indicator {
+  animation: hero-content-in 0.8s ease 1.4s both;
+}
+
+/* ────────────────────────────────────────────────────────────
+   27. TEAM SECTION
+   Two-tier layout:
+     • .team-main-card  — large portrait cards (first 4 members, flip for bio)
+     • .team-other-tile — compact pill tiles (remaining members)
+   --tc (team-color) driven by data-color="N" on the card root.
+   ──────────────────────────────────────────────────────────── */
+
+/* Accent colours shared by both tiers */
+[data-color='0'] {
+  --tc: #1d4ed8;
+}
+[data-color='1'] {
+  --tc: #15803d;
+}
+[data-color='2'] {
+  --tc: #7e22ce;
+}
+[data-color='3'] {
+  --tc: #b45309;
+}
+[data-color='4'] {
+  --tc: #0f766e;
+}
+[data-color='5'] {
+  --tc: #be185d;
+}
+[data-color='6'] {
+  --tc: #4338ca;
+}
+[data-color='7'] {
+  --tc: #b91c1c;
+}
+
+/* ── Main portrait cards ─────────────────────────────────── */
+.team-main-card {
+  perspective: 1200px;
+  position: relative;
+  /* Tall portrait — shows face + full body */
+  aspect-ratio: 3 / 4;
+  min-height: 320px;
+}
+
+.team-main-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.team-main-card-inner.is-flipped {
+  transform: rotateY(180deg);
+}
+
+/* Shared face base */
+.team-main-card-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 4px 16px rgb(0 0 0 / 0.12);
+  transition: box-shadow 0.3s ease;
+}
+
+/* Front — full-bleed photo with name/role gradient overlay */
+.team-main-card-front {
+  cursor: pointer;
+  appearance: none;
+  font: inherit;
+  padding: 0;
+  background: var(--color-card);
+  display: block;
+  width: 100%;
+  text-align: left;
+}
+
+.team-main-card:hover .team-main-card-front {
+  box-shadow: 0 12px 32px rgb(0 0 0 / 0.2);
+}
+
+.team-main-card-front:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 3px;
+}
+
+/* Photo area — fills the entire card */
+.team-main-photo {
+  position: absolute;
+  inset: 0;
+  background: var(--color-muted);
+}
+
+.team-main-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+}
+
+/* Fallback initials when no photo */
+.team-main-avatar {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  font-weight: 700;
+  color: #fff;
+  background-color: var(--tc, var(--color-primary));
+  border-radius: 0;
+}
+
+/* Gradient name overlay at bottom of front face */
+.team-main-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 2.5rem 1.25rem 1.25rem;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.72) 0%, transparent 100%);
+  color: #fff;
+}
+
+.team-main-member-name {
+  font-weight: 700;
+  font-size: 1.125rem;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.team-main-member-role {
+  font-size: 0.8125rem;
+  opacity: 0.8;
+  margin-top: 0.25rem;
+}
+
+.team-main-hint {
+  display: block;
+  font-size: 0.6875rem;
+  opacity: 0.55;
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+/* Back — bio + social links */
+.team-main-card-back {
+  transform: rotateY(180deg);
+  background-color: var(--color-card);
+  border-color: var(--tc, var(--color-border));
+  border-width: 2px;
+  cursor: default;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+}
+
+/* Coloured top strip on back */
+.team-card-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: var(--radius-card) var(--radius-card) 0 0;
+  background: linear-gradient(90deg, var(--tc, var(--color-primary)), transparent);
+}
+
+/* Role text on back */
+.team-role-back {
+  color: var(--tc, var(--color-primary));
+  font-size: var(--text-xs);
+  margin-top: 0.125rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Social icon links (shared) */
+.team-social-link {
+  display: inline-block;
+  color: var(--color-muted-foreground);
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.team-social-link:hover {
+  color: var(--tc, var(--color-primary));
+  transform: scale(1.15);
+}
+
+/* ── Other member compact tiles ──────────────────────────── */
+.team-other-tile {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.375rem 0.875rem 0.375rem 0.375rem;
+  border: 1px solid var(--color-border);
+  border-radius: 9999px;
+  background-color: var(--color-card);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.05);
+  transition:
+    box-shadow 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.team-other-tile:hover {
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+  border-color: var(--tc, var(--color-primary));
+  transform: translateY(-1px);
+}
+
+/* Small avatar image */
+.team-other-avatar-img {
+  height: 2.25rem;
+  width: 2.25rem;
+  border-radius: 9999px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.team-other-avatar-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Small initials fallback */
+.team-other-avatar {
+  height: 2.25rem;
+  width: 2.25rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  background-color: var(--tc, var(--color-primary));
+  flex-shrink: 0;
+}
+
+.team-other-name {
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1.2;
+  color: var(--color-foreground);
+  white-space: nowrap;
+}
+
+.team-other-role {
+  font-size: 0.6875rem;
+  color: var(--color-muted-foreground);
+  margin-top: 0.125rem;
+  white-space: nowrap;
+}
+
+/* ────────────────────────────────────────────────────────────
+   22. PRINT STYLES
+   ──────────────────────────────────────────────────────────── */
+@media print {
+  *,
+  *::before,
+  *::after {
+    background: transparent !important;
+    color: black !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  /* Hide non-content elements */
+  header,
+  footer,
+  nav,
+  aside,
+  .floating-cta,
+  .btn,
+  [role='banner'],
+  [role='navigation'],
+  [role='complementary'] {
+    display: none !important;
+  }
+
+  /* Show full URLs after links */
+  a[href]::after {
+    content: ' (' attr(href) ')';
+    font-size: 0.7em;
+    color: #555;
+  }
+
+  a[href^='#']::after,
+  a[href^='javascript']::after {
+    content: '';
+  }
+
+  /* Avoid page breaks inside key elements */
+  h1,
+  h2,
+  h3,
+  h4,
+  blockquote,
+  figure,
+  table,
+  pre {
+    break-inside: avoid;
+  }
+
+  /* Page margins */
+  @page {
+    margin: 1.5cm 2cm;
+  }
+
+  img {
+    max-width: 100% !important;
+  }
+}
+
+/* ────────────────────────────────────────────────────────────
+   23. RESPONSIVE VISIBILITY HELPERS
+   ──────────────────────────────────────────────────────────── */
+.hide-mobile {
+  display: none;
+}
+.hide-desktop {
+  display: block;
+}
+
+@media (min-width: 48rem) {
+  .hide-mobile {
+    display: block;
+  }
+  .hide-desktop {
+    display: none;
+  }
+}
+
+/* ────────────────────────────────────────────────────────────
+   24. FULL-PAGE BLOCK SYSTEM
+   Standard reusable full-page blocks with consistent
+   spacing for xl → mobile.
+   ──────────────────────────────────────────────────────────── */
+
+/* ── Hero block ── */
+.block-hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: calc(100dvh - var(--header-height));
+  padding-block: var(--section-padding-y-lg);
+  overflow: hidden;
+}
+
+.block-hero .hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: var(--width-content);
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: var(--gutter-x);
+}
+
+.block-hero .hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.block-hero .hero-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* ── Feature / content block ── */
+.block-feature {
+  padding-block: var(--section-padding-y);
+}
+
+.block-feature .feature-grid {
+  display: grid;
+  gap: var(--space-12);
+  align-items: center;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 48rem) {
+  .block-feature .feature-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 64rem) {
+  .block-feature .feature-grid {
+    grid-template-columns: 5fr 7fr;
+    gap: var(--space-16);
+  }
+}
+
+/* ── Cards block ── */
+.block-cards {
+  padding-block: var(--section-padding-y);
+}
+
+.block-cards .cards-grid {
+  display: grid;
+  gap: var(--grid-gap);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 40rem) {
+  .block-cards .cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 64rem) {
+  .block-cards .cards-grid.cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .block-cards .cards-grid.cols-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ── CTA Banner block ── */
+.block-cta {
+  padding-block: var(--section-padding-y-sm);
+  text-align: center;
+}
+
+.block-cta .cta-inner {
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
+  border-radius: calc(var(--radius-card) * 2);
+  padding: var(--space-12) var(--gutter-x);
+}
+
+/* ────────────────────────────────────────────────────────────
+   25. DEVICE-SPECIFIC OVERRIDES
+   ──────────────────────────────────────────────────────────── */
+
+/* ── 2XL: 1376px+ ── */
+@media (min-width: 86rem) {
+  :root {
+    --gutter-x: 2rem;
+  }
+
+  .section {
+    padding-block: clamp(6rem, 8vw, 8rem);
+  }
+}
+
+/* ── XL: 1280px – 1375px ── */
+@media (min-width: 80rem) and (max-width: 85.9375rem) {
+  :root {
+    --gutter-x: 2rem;
+  }
+}
+
+/* ── LG: 1024px – 1279px ── */
+@media (min-width: 64rem) and (max-width: 79.9375rem) {
+  :root {
+    --gutter-x: 1.5rem;
+  }
+}
+
+/* ── MD: 768px – 1023px (tablet) ── */
+@media (min-width: 48rem) and (max-width: 63.9375rem) {
+  :root {
+    --gutter-x: 1.5rem;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 4vw, 2.5rem);
+  }
+  h2 {
+    font-size: clamp(1.625rem, 3.5vw, 2rem);
+  }
+}
+
+/* ── SM: 640px – 767px ── */
+@media (min-width: 40rem) and (max-width: 47.9375rem) {
+  :root {
+    --gutter-x: 1.25rem;
+  }
+}
+
+/* ── XS: < 640px (mobile) ── */
+@media (max-width: 39.9375rem) {
+  :root {
+    --gutter-x: 1rem;
+    --header-height: 3.5rem;
+    --section-padding-y: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  .section-header {
+    margin-bottom: var(--space-8);
+  }
+
+  /* Stack all grid layouts */
+  .grid-2,
+  .grid-3,
+  .grid-4,
+  .grid-sidebar,
+  .grid-sidebar-left {
+    grid-template-columns: 1fr;
+  }
+
+  /* Full-width buttons on mobile */
+  .btn-block-mobile {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Reduce heading sizes further on very small screens */
+  h1 {
+    font-size: clamp(1.75rem, 7vw, 2.25rem);
+  }
+  h2 {
+    font-size: clamp(1.5rem, 6vw, 1.875rem);
+  }
+  h3 {
+    font-size: clamp(1.25rem, 5vw, 1.5rem);
+  }
+}
+
+/* ── Very small (360px and below) ── */
+@media (max-width: 22.5rem) {
+  :root {
+    --gutter-x: 0.875rem;
+  }
+
+  h1 {
+    font-size: 1.625rem;
+  }
+  h2 {
+    font-size: 1.375rem;
+  }
+}
+
+/* ────────────────────────────────────────────────────────────
+   27. SCROLL-TRIGGERED ANIMATIONS
+   Used by AnimateIn component (src/components/AnimateIn).
+   Variants: fade-up | fade-in | fade-left | fade-right
+   ──────────────────────────────────────────────────────────── */
+
+.animate-fade-up {
+  opacity: 0;
+  transform: translateY(1.5rem);
+  transition:
+    opacity 0.75s var(--ease-out),
+    transform 0.75s var(--ease-out);
+  transition-delay: var(--animate-delay, 0ms);
+}
+
+.animate-fade-in {
+  opacity: 0;
+  transition: opacity 0.75s var(--ease-out);
+  transition-delay: var(--animate-delay, 0ms);
+}
+
+.animate-fade-left {
+  opacity: 0;
+  transform: translateX(-1.5rem);
+  transition:
+    opacity 0.75s var(--ease-out),
+    transform 0.75s var(--ease-out);
+  transition-delay: var(--animate-delay, 0ms);
+}
+
+.animate-fade-right {
+  opacity: 0;
+  transform: translateX(1.5rem);
+  transition:
+    opacity 0.75s var(--ease-out),
+    transform 0.75s var(--ease-out);
+  transition-delay: var(--animate-delay, 0ms);
+}
+
+/* Revealed state — paired with variant class above */
+.animate-fade-up.animate-is-visible,
+.animate-fade-in.animate-is-visible,
+.animate-fade-left.animate-is-visible,
+.animate-fade-right.animate-is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── Hero entrance animation ────────────────────────────────
+   Plays once on mount. Content enters from slightly below.  */
+@keyframes hero-content-enter {
+  from {
+    opacity: 0;
+    transform: translateY(1.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.animate-hero-content {
+  animation: hero-content-enter 0.8s var(--ease-out) 0.2s both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-hero-content {
+    animation: none;
+  }
+}
+
+/* ── Logo grayscale hover (fine-pointer only) ───────────────
+   Used by LogoCloud to avoid false hover on touch.          */
+.logo-hover-reveal {
+  filter: grayscale(1);
+  opacity: 0.6;
+  transition:
+    filter 200ms var(--ease-out),
+    opacity 200ms var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .logo-hover-reveal:hover {
+    filter: grayscale(0);
+    opacity: 1;
+  }
+}
+
+/* ── FAQ animated accordion ─────────────────────────────────
+   The outer .faq-answer grid transitions between 0fr and 1fr.
+   The inner .faq-answer-inner overflow:hidden clips during motion. */
+.faq-answer {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 300ms var(--ease-out);
+}
+
+.faq-answer.faq-open {
+  grid-template-rows: 1fr;
+}
+
+.faq-answer-inner {
+  overflow: hidden;
+}
+
+/* ── Tabs content fade ──────────────────────────────────────
+   Re-keyed wrapper plays this once on mount.               */
+@keyframes tab-content-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.animate-tab-content {
+  animation: tab-content-in 200ms var(--ease-out) both;
+}
+
+/* Respect user motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up,
+  .animate-fade-in,
+  .animate-fade-left,
+  .animate-fade-right {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .faq-answer {
+    transition: none;
+  }
+
+  .animate-tab-content {
+    animation: none;
+  }
+}
+
+/* ────────────────────────────────────────────────────────────
+   28. SECTION ALTERNATING BACKGROUNDS
+   Primary mechanism: inline style={{ backgroundColor: 'var(--section-bg-a/b)' }}
+   CSS variables defined in globals.css :root and [data-theme='dark'].
+   Light: #ffffff / #F5F5F5  |  Dark: #1a1a1a / #242424
+   ──────────────────────────────────────────────────────────── */

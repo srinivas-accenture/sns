@@ -15,21 +15,28 @@ type MediaBlockProps = {
 export function MediaBlock({ media, caption, position = 'default' }: MediaBlockProps) {
   if (!media?.url) return null
 
-  const isFullscreen = position === 'fullscreen'
-
   return (
-    <figure style={{ margin: 0, width: isFullscreen ? '100vw' : '100%' }}>
-      <Image
-        src={media.url}
-        alt={media.alt ?? ''}
-        width={media.width ?? 1600}
-        height={media.height ?? 900}
-        style={{ width: '100%', height: 'auto' }}
-      />
+    <figure className={position === 'fullscreen' ? 'my-0' : 'mx-auto my-12 max-w-6xl px-6'}>
+      <div className={position === 'fullscreen' ? 'relative h-[60vh] w-full' : 'overflow-hidden rounded-lg'}>
+        {position === 'fullscreen' ? (
+          <Image
+            src={media.url}
+            alt={media.alt ?? ''}
+            fill
+            className="object-cover"
+          />
+        ) : (
+          <Image
+            src={media.url}
+            alt={media.alt ?? ''}
+            width={media.width ?? 1600}
+            height={media.height ?? 900}
+            className="h-auto w-full"
+          />
+        )}
+      </div>
       {caption && (
-        <figcaption style={{ textAlign: 'center', marginTop: '0.5rem', opacity: 0.7 }}>
-          {caption}
-        </figcaption>
+        <figcaption className="mt-3 text-center text-sm text-gray-500">{caption}</figcaption>
       )}
     </figure>
   )

@@ -1,7 +1,6 @@
-import { getPayload } from 'payload'
+import { headers } from 'next/headers'
 import React from 'react'
 
-import config from '@/payload.config'
 import { DEFAULT_LANGUAGE_CODE } from '@/i18n/languages'
 import './styles.css'
 
@@ -10,24 +9,14 @@ export const metadata = {
   title: 'Payload Blank Template',
 }
 
-async function getDefaultLanguage(): Promise<string> {
-  try {
-    const payloadConfig = await config
-    const payload = await getPayload({ config: payloadConfig })
-    const siteSettings = await payload.findGlobal({ slug: 'site-settings' })
-    return (siteSettings?.defaultLanguage as string) ?? DEFAULT_LANGUAGE_CODE
-  } catch {
-    return DEFAULT_LANGUAGE_CODE
-  }
-}
-
 export default async function RootLayout(props: { children: React.ReactNode }) {
   const { children } = props
-  const lang = await getDefaultLanguage()
+  const headersList = await headers()
+  const lang = headersList.get('x-locale') ?? DEFAULT_LANGUAGE_CODE
 
   return (
-    <html lang={lang}>
-      <body>
+    <html lang={lang} className="bg-white text-gray-900 antialiased">
+      <body className="min-h-screen font-sans">
         <main>{children}</main>
       </body>
     </html>

@@ -24,20 +24,20 @@ export function MediumImpact({ richText, media, links }: MediumImpactHeroProps) 
   return (
     <section>
       {media?.url && (
-        <div style={{ position: 'relative', height: '400px' }}>
+        <div className="relative h-[400px] w-full overflow-hidden">
           <Image
             src={media.url}
             alt={media.alt ?? ''}
             fill
-            style={{ objectFit: 'cover' }}
+            className="object-cover"
             priority
           />
         </div>
       )}
-      <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
+      <div className="mx-auto max-w-6xl px-6 py-12">
         {richText && <RichText data={richText} />}
         {links && links.length > 0 && (
-          <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem', flexWrap: 'wrap' }}>
+          <div className="mt-6 flex flex-wrap gap-4">
             {links.map((item, i) => {
               const { link } = item
               if (!link?.label) return null
@@ -47,7 +47,11 @@ export function MediumImpact({ richText, media, links }: MediumImpactHeroProps) 
                   href={link.url ?? '#'}
                   target={link.newTab ? '_blank' : undefined}
                   rel={link.newTab ? 'noopener noreferrer' : undefined}
-                  data-appearance={link.appearance ?? 'default'}
+                  className={
+                    link.appearance === 'outline'
+                      ? 'rounded border border-gray-900 px-6 py-3 text-sm font-medium transition hover:bg-gray-900 hover:text-white'
+                      : 'rounded bg-gray-900 px-6 py-3 text-sm font-medium text-white transition hover:bg-gray-700'
+                  }
                 >
                   {link.label}
                 </a>

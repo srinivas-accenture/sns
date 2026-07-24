@@ -1,11 +1,11 @@
 import React from 'react'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 
-const columnWidths: Record<string, string> = {
-  oneThird: '33.333%',
-  half: '50%',
-  twoThirds: '66.666%',
-  full: '100%',
+const columnWidthClass: Record<string, string> = {
+  oneThird: 'w-full md:w-1/3',
+  half: 'w-full md:w-1/2',
+  twoThirds: 'w-full md:w-2/3',
+  full: 'w-full',
 }
 
 type Column = {
@@ -29,22 +29,32 @@ export function ContentBlock({ columns }: ContentBlockProps) {
   if (!columns?.length) return null
 
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
-      {columns.map((col, i) => (
-        <div key={i} style={{ width: columnWidths[col.size ?? 'full'] ?? '100%' }}>
-          {col.richText && <RichText data={col.richText} />}
-          {col.enableLink && col.link?.label && (
-            <a
-              href={col.link.url ?? '#'}
-              target={col.link.newTab ? '_blank' : undefined}
-              rel={col.link.newTab ? 'noopener noreferrer' : undefined}
-              data-appearance={col.link.appearance ?? 'default'}
-            >
-              {col.link.label}
-            </a>
-          )}
-        </div>
-      ))}
-    </div>
+    <section className="mx-auto max-w-6xl px-6 py-12">
+      <div className="flex flex-wrap gap-8">
+        {columns.map((col, i) => (
+          <div key={i} className={columnWidthClass[col.size ?? 'full'] ?? 'w-full'}>
+            {col.richText && (
+              <div className="prose max-w-none">
+                <RichText data={col.richText} />
+              </div>
+            )}
+            {col.enableLink && col.link?.label && (
+              <a
+                href={col.link.url ?? '#'}
+                target={col.link.newTab ? '_blank' : undefined}
+                rel={col.link.newTab ? 'noopener noreferrer' : undefined}
+                className={
+                  col.link.appearance === 'outline'
+                    ? 'mt-4 inline-block rounded border border-gray-900 px-5 py-2.5 text-sm font-medium transition hover:bg-gray-900 hover:text-white'
+                    : 'mt-4 inline-block rounded bg-gray-900 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-gray-700'
+                }
+              >
+                {col.link.label}
+              </a>
+            )}
+          </div>
+        ))}
+      </div>
+    </section>
   )
 }

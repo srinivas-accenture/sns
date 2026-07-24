@@ -1,52 +1,8 @@
-import { getPayload } from 'payload'
-import { notFound } from 'next/navigation'
-import React from 'react'
+import { redirect } from 'next/navigation'
 
-import config from '@/payload.config'
-import { RenderBlocks } from '@/components/RenderBlocks'
-import { RenderHero } from '@/components/RenderHero'
+import { getDefaultLocale } from '@/i18n/getDefaultLocale'
 
-export async function generateMetadata() {
-  const payloadConfig = await config
-  const payload = await getPayload({ config: payloadConfig })
-
-  const result = await payload.find({
-    collection: 'pages',
-    where: { slug: { equals: 'home' } },
-    limit: 1,
-  })
-
-  const page = result.docs[0]
-  if (!page) return {}
-
-  const meta = page.meta as any
-  return {
-    title: meta?.title ?? page.title,
-    description: meta?.description,
-    openGraph: meta?.image
-      ? { images: [{ url: (meta.image as any)?.url }] }
-      : undefined,
-  }
-}
-
-export default async function HomePage() {
-  const payloadConfig = await config
-  const payload = await getPayload({ config: payloadConfig })
-
-  const result = await payload.find({
-    collection: 'pages',
-    where: { slug: { equals: 'home' } },
-    limit: 1,
-    draft: false,
-  })
-
-  const page = result.docs[0]
-  if (!page) notFound()
-
-  return (
-    <article>
-      <RenderHero hero={page.hero as any} />
-      {page.layout && <RenderBlocks blocks={page.layout as any} />}
-    </article>
-  )
+export default async function RootPage() {
+  const locale = await getDefaultLocale()
+  redirect(`/${locale}`)
 }

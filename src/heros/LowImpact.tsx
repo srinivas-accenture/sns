@@ -15,10 +15,10 @@ type LowImpactHeroProps = {
 
 export function LowImpact({ richText, links }: LowImpactHeroProps) {
   return (
-    <section style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
+    <section className="mx-auto max-w-6xl px-6 py-16">
       {richText && <RichText data={richText} />}
       {links && links.length > 0 && (
-        <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem', flexWrap: 'wrap' }}>
+        <div className="mt-6 flex flex-wrap gap-4">
           {links.map((item, i) => {
             const { link } = item
             if (!link?.label) return null
@@ -28,7 +28,11 @@ export function LowImpact({ richText, links }: LowImpactHeroProps) {
                 href={link.url ?? '#'}
                 target={link.newTab ? '_blank' : undefined}
                 rel={link.newTab ? 'noopener noreferrer' : undefined}
-                data-appearance={link.appearance ?? 'default'}
+                className={
+                  link.appearance === 'outline'
+                    ? 'rounded border border-gray-900 px-6 py-3 text-sm font-medium transition hover:bg-gray-900 hover:text-white'
+                    : 'rounded bg-gray-900 px-6 py-3 text-sm font-medium text-white transition hover:bg-gray-700'
+                }
               >
                 {link.label}
               </a>
