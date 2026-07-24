@@ -288,8 +288,9 @@ export interface FolderInterface {
 export interface Page {
   id: number;
   title: string;
+  publishedAt?: string | null;
   /**
-   * URL path segment, e.g. "about-us". Use lowercase letters, numbers, and hyphens.
+   * URL path segment — lowercase letters, numbers, and hyphens only.
    */
   slug: string;
   hero: {
@@ -423,16 +424,10 @@ export interface Page {
       )[]
     | null;
   meta?: {
-    /**
-     * Overrides the page title in search engine results.
-     */
     title?: string | null;
-    /**
-     * Summary shown under the title in search results (150–160 chars recommended).
-     */
     description?: string | null;
     /**
-     * Image shown when shared on social media (1200×630px recommended).
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
      */
     image?: (number | null) | Media;
   };
@@ -666,6 +661,7 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface PagesSelect<T extends boolean = true> {
   title?: T;
+  publishedAt?: T;
   slug?: T;
   hero?:
     | T

@@ -1,5 +1,7 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { seoPlugin } from '@payloadcms/plugin-seo'
+import type { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
 import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
@@ -14,6 +16,23 @@ import { DEFAULT_LANGUAGE_CODE, LANGUAGES } from './i18n/languages'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SERVER_URL ||
+  process.env.VERCEL_PROJECT_PRODUCTION_URL ||
+  'https://example.com'
+
+const generateTitle: GenerateTitle = ({ doc }) => {
+  const title = doc?.title as string | undefined
+  return title ? `${title} | SNS` : 'SNS'
+}
+
+const generateURL: GenerateURL = ({ doc, locale }) => {
+  const slug = doc?.slug as string | undefined
+  const lang = (locale as string) || DEFAULT_LANGUAGE_CODE
+  if (!slug) return SITE_URL
+  return slug === 'home' ? `${SITE_URL}/${lang}` : `${SITE_URL}/${lang}/${slug}`
+}
 
 export default buildConfig({
   admin: {
@@ -41,5 +60,13 @@ export default buildConfig({
     push: false,
   }),
   sharp,
-  plugins: [],
+  plugins: [
+    seoPlugin({
+      collections: ['pages'],
+      uploadsCollection: 'media',
+      tabbedUI: true,
+      generateTitle,
+      generateURL,
+    }),
+  ],
 })

@@ -1,17 +1,43 @@
 import type { CollectionConfig } from 'payload'
-import { lexicalEditor } from '@payloadcms/richtext-lexical'
 
 import { CallToActionBlock } from '@/blocks/CallToAction/config'
 import { ContentBlock } from '@/blocks/Content/config'
 import { MediaBlock } from '@/blocks/MediaBlock/config'
 import { heroField } from '@/heros/config'
 import { revalidateDelete, revalidatePage } from './hooks/revalidatePage'
+import { isAdminOrHigher } from '../../access/isAdminOrHigher'
+import { isEditorOrHigher } from '../../access/isEditorOrHigher'
+import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
+import { generatePreviewPath, generateLivePreviewUrl } from '../../utilities/generatePreviewPath'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
+  access: {
+    create: isEditorOrHigher,
+    delete: isAdminOrHigher,
+    read: authenticatedOrPublished,
+    update: isEditorOrHigher,
+  },
+  defaultPopulate: {
+    title: true,
+    slug: true,
+  },
   admin: {
+    defaultColumns: ['title', 'slug', 'publishedAt', 'updatedAt'],
+    livePreview: {
+      url: ({ data, req }) =>
+        generateLivePreviewUrl({
+          slug: data?.slug as string,
+          req,
+        }),
+    },
+    preview: (data, { req }) =>
+      generatePreviewPath({
+        slug: data?.slug as string,
+        collection: 'pages',
+        req,
+      }),
     useAsTitle: 'title',
-    defaultColumns: ['title', 'slug', 'updatedAt'],
   },
   hooks: {
     afterChange: [revalidatePage],
@@ -28,6 +54,26 @@ export const Pages: CollectionConfig = {
       localized: true,
     },
     {
+      name: 'publishedAt',
+      type: 'date',
+      admin: {
+        position: 'sidebar',
+        date: {
+          pickerAppearance: 'dayAndTime',
+        },
+      },
+      hooks: {
+        beforeChange: [
+          ({ siblingData, value }) => {
+            if (siblingData._status === 'published' && !value) {
+              return new Date().toISOString()
+            }
+            return value
+          },
+        ],
+      },
+    },
+    {
       name: 'slug',
       type: 'text',
       required: true,
@@ -35,7 +81,7 @@ export const Pages: CollectionConfig = {
       unique: true,
       admin: {
         position: 'sidebar',
-        description: 'URL path segment, e.g. "about-us". Use lowercase letters, numbers, and hyphens.',
+        description: 'URL path segment — lowercase letters, numbers, and hyphens only.',
       },
     },
     {
@@ -53,44 +99,6 @@ export const Pages: CollectionConfig = {
               type: 'blocks',
               blocks: [ContentBlock, MediaBlock, CallToActionBlock],
               required: false,
-            },
-          ],
-        },
-        {
-          label: 'SEO',
-          fields: [
-            {
-              name: 'meta',
-              type: 'group',
-              fields: [
-                {
-                  name: 'title',
-                  type: 'text',
-                  label: 'Meta Title',
-                  localized: true,
-                  admin: {
-                    description: 'Overrides the page title in search engine results.',
-                  },
-                },
-                {
-                  name: 'description',
-                  type: 'textarea',
-                  label: 'Meta Description',
-                  localized: true,
-                  admin: {
-                    description: 'Summary shown under the title in search results (150–160 chars recommended).',
-                  },
-                },
-                {
-                  name: 'image',
-                  type: 'upload',
-                  label: 'OG Image',
-                  relationTo: 'media',
-                  admin: {
-                    description: 'Image shown when shared on social media (1200×630px recommended).',
-                  },
-                },
-              ],
             },
           ],
         },
