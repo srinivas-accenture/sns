@@ -7,6 +7,8 @@ import sharp from 'sharp'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
+import { SiteSettings } from './globals/SiteSettings'
+import { DEFAULT_LANGUAGE_CODE, LANGUAGES } from './i18n/languages'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -19,6 +21,12 @@ export default buildConfig({
     },
   },
   collections: [Users, Media],
+  globals: [SiteSettings],
+  localization: {
+    locales: LANGUAGES.map(({ code, label }) => ({ code, label })),
+    defaultLocale: DEFAULT_LANGUAGE_CODE,
+    fallback: true,
+  },
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -28,6 +36,7 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL || '',
     },
+    push: false,
   }),
   sharp,
   plugins: [],
