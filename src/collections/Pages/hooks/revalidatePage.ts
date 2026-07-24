@@ -20,7 +20,7 @@ export const revalidatePage: CollectionAfterChangeHook<Page> = ({
       payload.logger.info(`Revalidating page: ${p}`)
       revalidatePath(p)
     })
-    revalidateTag('pages-sitemap')
+    revalidateTag('pages-sitemap', 'max')
   }
 
   // Page was unpublished — revalidate the old paths so they go to 404
@@ -30,7 +30,7 @@ export const revalidatePage: CollectionAfterChangeHook<Page> = ({
       payload.logger.info(`Revalidating unpublished page: ${p}`)
       revalidatePath(p)
     })
-    revalidateTag('pages-sitemap')
+    revalidateTag('pages-sitemap', 'max')
   }
 
   return doc
@@ -40,7 +40,7 @@ export const revalidateDelete: CollectionAfterDeleteHook<Page> = ({ doc, req: { 
   if (context.disableRevalidate) return doc
 
   pagePaths(doc?.slug ?? '').forEach((p) => revalidatePath(p))
-  revalidateTag('pages-sitemap')
+  revalidateTag('pages-sitemap', 'max')
 
   return doc
 }

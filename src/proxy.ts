@@ -5,7 +5,7 @@ import { DEFAULT_LANGUAGE_CODE, LANGUAGES } from './i18n/languages'
 
 const validLocales = new Set(LANGUAGES.map((l) => l.code))
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const firstSegment = request.nextUrl.pathname.split('/').filter(Boolean)[0] ?? ''
   const locale = validLocales.has(firstSegment) ? firstSegment : DEFAULT_LANGUAGE_CODE
 
