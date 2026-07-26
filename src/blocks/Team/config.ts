@@ -1,5 +1,6 @@
 import type { Block } from 'payload'
 
+import { link } from '@/fields/link'
 import {
   FixedToolbarFeature,
   HeadingFeature,
@@ -25,6 +26,19 @@ export const Team: Block = {
   interfaceName: 'TeamBlock',
   labels: { singular: 'Team', plural: 'Teams' },
   fields: [
+    {
+      name: 'variant',
+      type: 'select',
+      defaultValue: 'default',
+      options: [
+        { label: 'Default', value: 'default' },
+        { label: 'Primary', value: 'primary' },
+      ],
+      admin: {
+        position: 'sidebar',
+        description: 'Default: featured flip-cards + compact tiles. Primary: uniform photo grid for all members.',
+      },
+    },
     { name: 'title', type: 'text' },
     { name: 'subtitle', type: 'text' },
     {
@@ -96,6 +110,28 @@ export const Team: Block = {
       label: 'Bottom Content',
       editor: richTextEditor,
       admin: { description: 'Shown below all team members.' },
+    },
+    // ── CTA Button ───────────────────────────────────────────────
+    {
+      type: 'collapsible',
+      label: 'CTA Button (below members)',
+      admin: { initCollapsed: true },
+      fields: [
+        {
+          name: 'enableCta',
+          type: 'checkbox',
+          label: 'Enable CTA Button',
+          defaultValue: false,
+        },
+        link({
+          appearances: ['default', 'outline'],
+          overrides: {
+            name: 'ctaLink',
+            label: 'CTA Button',
+            admin: { condition: (_, s) => !!s?.enableCta },
+          },
+        }),
+      ],
     },
   ],
 }

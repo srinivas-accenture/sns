@@ -5,6 +5,7 @@ import { ContentBlock } from '@/blocks/Content/Component'
 import { ContentWithImageBlock } from '@/blocks/ContentWithImage/Component'
 import { EventsBlock } from '@/blocks/Events/Component'
 import { FormBlock } from '@/blocks/Form/Component'
+import { GalleryBlock } from '@/blocks/Gallery/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { SliderBlock } from '@/blocks/Slider/Component'
 import { TeamBlock } from '@/blocks/Team/Component'
@@ -20,6 +21,7 @@ const blockComponents: Record<string, React.FC<any>> = {
   contentWithImage: ContentWithImageBlock,
   events: EventsBlock,
   formBlock: FormBlock,
+  gallery: GalleryBlock,
   mediaBlock: MediaBlock,
   slider: SliderBlock,
   team: TeamBlock,

@@ -5,6 +5,7 @@ import { ContentBlock } from '@/blocks/Content/config'
 import { ContentWithImage } from '@/blocks/ContentWithImage/config'
 import { Events } from '@/blocks/Events/config'
 import { FormBlock } from '@/blocks/Form/config'
+import { Gallery } from '@/blocks/Gallery/config'
 import { MediaBlock } from '@/blocks/MediaBlock/config'
 import { Slider } from '@/blocks/Slider/config'
 import { Team } from '@/blocks/Team/config'
@@ -102,7 +103,7 @@ export const Pages: CollectionConfig = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [ContentBlock, MediaBlock, CallToActionBlock, Slider, ContentWithImage, Team, FormBlock, Events],
+              blocks: [ContentBlock, MediaBlock, CallToActionBlock, Slider, ContentWithImage, Team, FormBlock, Events, Gallery],
               required: false,
             },
           ],

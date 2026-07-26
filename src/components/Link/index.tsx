@@ -26,6 +26,7 @@ type CMSLinkType = {
   } | null
   showArrow?: boolean
   size?: ButtonProps['size'] | null
+  style?: React.CSSProperties
   type?: 'custom' | 'reference' | null
   url?: string | null
 }
@@ -49,6 +50,7 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
     reference,
     showArrow: showArrowProp,
     size: sizeFromProps,
+    style,
     url,
   } = props
 
@@ -76,7 +78,7 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
 
   if (appearance === 'inline') {
     return (
-      <Link className={cn(className)} href={href} onClick={onClick} {...newTabProps}>
+      <Link className={cn(className)} href={href} onClick={onClick} style={style} {...newTabProps}>
         {label && label}
         {children && children}
       </Link>
@@ -85,7 +87,7 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
 
   return (
     <Button asChild showArrow={false} className={className} size={size} variant={appearance}>
-      <Link className={cn(className)} href={href} onClick={onClick} {...newTabProps}>
+      <Link className={cn(className)} href={href} onClick={onClick} style={style} {...newTabProps}>
         {label && label}
         {children && children}
         {showArrow && size !== 'icon' && (

@@ -7,29 +7,20 @@ import { AnimateIn } from '@/components/AnimateIn'
 import React, { useState } from 'react'
 import { Media } from '@/components/Media'
 import RichText from '@/components/RichText'
+import { CMSLink } from '@/components/Link'
 
 type Member = NonNullable<TeamBlockProps['members']>[number]
 
-// Extend with new fields until generate:types catches up
+// Extend with fields not yet reflected in generated types
 type Props = TeamBlockProps & {
   className?: string
   disableInnerContainer?: boolean
   topContent?: DefaultTypedEditorState | null
   bottomContent?: DefaultTypedEditorState | null
-  otherMembersTitle?: string | null
 }
 
 const COLOR_COUNT = 8
 
-function getInitials(name: string): string {
-  return name
-    .split(' ')
-    .filter(Boolean)
-    .map((n) => n[0])
-    .join('')
-    .toUpperCase()
-    .slice(0, 2)
-}
 
 /* ── Social icons ────────────────────────────────────────── */
 const LinkedInIcon = () => (
@@ -84,7 +75,6 @@ function MainMemberCard({ member, index }: { member: Member; index: number }) {
   const [flipped, setFlipped] = useState(false)
 
   const name = member.name ?? ''
-  const initials = getInitials(name)
   const colorIndex = index % COLOR_COUNT
   const hasBioOrLinks = member.bio || (member.socialLinks && member.socialLinks.length > 0)
 
@@ -103,7 +93,7 @@ function MainMemberCard({ member, index }: { member: Member; index: number }) {
             {member.photo ? (
               <Media resource={member.photo} imgClassName="h-full w-full object-cover object-top" />
             ) : (
-              <div className="team-main-avatar">{initials}</div>
+              <div className="team-main-avatar"><UserAvatarPlaceholder /></div>
             )}
           </div>
           <div className="team-main-overlay">
@@ -160,44 +150,89 @@ function MainMemberCard({ member, index }: { member: Member; index: number }) {
   )
 }
 
-/* ── Compact tile (remaining members) ────────────────────── */
-function OtherMemberTile({ member, index }: { member: Member; index: number }) {
+
+
+/* ── Primary variant card (uniform grid) ─────────────────── */
+const UserAvatarPlaceholder = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}
+    style={{ width: '40%', height: '40%', color: '#9ca3af' }}>
+    <path strokeLinecap="round" strokeLinejoin="round"
+      d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+  </svg>
+)
+
+function PrimaryMemberCard({ member }: { member: Member }) {
   const name = member.name ?? ''
-  const colorIndex = index % COLOR_COUNT
 
   return (
-    <div className="team-other-tile" data-color={colorIndex}>
-      {member.photo && (
-        <div className="team-other-avatar-img">
-          <Media resource={member.photo} imgClassName="h-full w-full object-cover" />
-        </div>
-      )}
-      <div>
-        <p className="team-other-name">{name}</p>
-        {member.role && <p className="team-other-role">{member.role}</p>}
+    <div
+      className="rounded-2xl border border-border bg-card shadow-sm transition-shadow duration-200 fine-hover:hover:shadow-md"
+      style={{ display: 'flex', flexDirection: 'column', padding: '0.75rem' }}
+    >
+      {/* Photo / avatar — square, 50% shorter than a portrait */}
+      <div style={{ position: 'relative', aspectRatio: '5 / 3', background: '#f3f4f6', borderRadius: '0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+        {member.photo ? (
+          <Media
+            resource={member.photo}
+            imgClassName="absolute inset-0 w-full h-full object-cover object-top"
+            htmlElement={null}
+          />
+        ) : (
+          <UserAvatarPlaceholder />
+        )}
+      </div>
+
+      {/* Info */}
+      <div style={{ paddingTop: '0.625rem', flexGrow: 1, textAlign: 'center' }}>
+        <p style={{ fontWeight: 600, fontSize: '0.875rem', lineHeight: 1.3 }} className="text-foreground">{name}</p>
+        {member.role && (
+          <p style={{ fontSize: '0.75rem', marginTop: '0.125rem' }} className="text-muted-foreground">{member.role}</p>
+        )}
+        {member.socialLinks && member.socialLinks.length > 0 && (
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginTop: '0.5rem' }}>
+            {member.socialLinks.map((link, j) => {
+              const Icon = SocialIcon[link.platform ?? ''] ?? SocialIcon['website']!
+              return (
+                <a
+                  key={j}
+                  href={link.url ?? '#'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={socialLabel[link.platform ?? ''] ?? link.platform ?? ''}
+                  className="team-social-link"
+                >
+                  {Icon && <Icon />}
+                </a>
+              )
+            })}
+          </div>
+        )}
       </div>
     </div>
   )
 }
 
 /* ── Main block export ───────────────────────────────────── */
-export const TeamBlock: React.FC<Props> = ({
-  className,
-  title,
-  subtitle,
-  topContent,
-  bottomContent,
-  otherMembersTitle,
-  members,
-}) => {
+export const TeamBlock: React.FC<Props> = (props) => {
+  const {
+    className,
+    title,
+    subtitle,
+    topContent,
+    bottomContent,
+    members,
+    variant,
+    enableCta,
+    ctaLink,
+  } = props
+
   if (!members?.length) return null
 
-  const mainMembers = members.slice(0, 4)
-  const otherMembers = members.slice(4)
+  const isPrimary = variant === 'primary'
+  const showCta   = !!enableCta
 
   return (
     <div className={cn('container py-20 lg:py-[7.5rem]', className)}>
-      {/* Section header */}
       {(title || subtitle) && (
         <AnimateIn variant="fade-up">
           <div className="mb-6">
@@ -207,45 +242,40 @@ export const TeamBlock: React.FC<Props> = ({
         </AnimateIn>
       )}
 
-      {/* Top rich text */}
       {topContent && (
         <AnimateIn variant="fade-up">
           <RichText data={topContent} enableGutter={false} className="mb-10" />
         </AnimateIn>
       )}
 
-      {/* Main members — large portrait grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-        {mainMembers.map((member, i) => (
-          <AnimateIn key={member.id ?? i} variant="fade-up" delay={i * 120}>
-            <MainMemberCard member={member} index={i} />
-          </AnimateIn>
-        ))}
-      </div>
-
-      {/* Other members section */}
-      {otherMembers.length > 0 && (
-        <div className="mb-10">
-          {otherMembersTitle && (
-            <AnimateIn variant="fade-up">
-              <h3 className="text-xl font-semibold text-foreground mb-5">{otherMembersTitle}</h3>
+      {isPrimary ? (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem' }}>
+          {members.map((member, i) => (
+            <AnimateIn key={member.id ?? i} variant="fade-up" delay={Math.min(i, 7) * 80}>
+              <PrimaryMemberCard member={member} />
             </AnimateIn>
-          )}
-          <div className="flex flex-wrap gap-3">
-            {otherMembers.map((member, i) => (
-              <AnimateIn key={member.id ?? i} variant="fade-up" delay={Math.min(i, 8) * 60}>
-                <OtherMemberTile member={member} index={mainMembers.length + i} />
-              </AnimateIn>
-            ))}
-          </div>
+          ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {members.slice(0, 4).map((member, i) => (
+            <AnimateIn key={member.id ?? i} variant="fade-up" delay={i * 120}>
+              <MainMemberCard member={member} index={i} />
+            </AnimateIn>
+          ))}
         </div>
       )}
 
-      {/* Bottom rich text */}
       {bottomContent && (
         <AnimateIn variant="fade-up">
           <RichText data={bottomContent} enableGutter={false} className="mt-4" />
         </AnimateIn>
+      )}
+
+      {showCta && ctaLink?.label && (
+        <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'center' }}>
+          <CMSLink {...ctaLink} appearance="default" size="lg" />
+        </div>
       )}
     </div>
   )

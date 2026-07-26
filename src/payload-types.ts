@@ -434,6 +434,7 @@ export interface Page {
         | TeamBlock
         | FormBlock
         | EventsBlock
+        | GalleryBlock
       )[]
     | null;
   meta?: {
@@ -589,6 +590,10 @@ export interface ContentWithImageBlock {
  * via the `definition` "TeamBlock".
  */
 export interface TeamBlock {
+  /**
+   * Default: featured flip-cards + compact tiles. Primary: uniform photo grid for all members.
+   */
+  variant?: ('default' | 'primary') | null;
   title?: string | null;
   subtitle?: string | null;
   /**
@@ -650,6 +655,21 @@ export interface TeamBlock {
     };
     [k: string]: unknown;
   } | null;
+  enableCta?: boolean | null;
+  ctaLink?: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?: {
+      relationTo: 'pages';
+      value: number | Page;
+    } | null;
+    url?: string | null;
+    label: string;
+    /**
+     * Choose how the link should be rendered.
+     */
+    appearance?: ('default' | 'outline') | null;
+  };
   id?: string | null;
   blockName?: string | null;
   blockType: 'team';
@@ -887,6 +907,51 @@ export interface EventsBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'events';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "GalleryBlock".
+ */
+export interface GalleryBlock {
+  title?: string | null;
+  layout?: ('carousel' | 'masonry' | 'grid') | null;
+  columns?: ('2' | '3' | '4') | null;
+  images?:
+    | {
+        image: number | Media;
+        caption?: string | null;
+        /**
+         * Alt text for accessibility (defaults to image alt if empty).
+         */
+        alt?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Leave empty to hide the CTA section entirely.
+   */
+  ctaTitle?: string | null;
+  /**
+   * CSS color value for the CTA strip background (e.g. #3C1500, #1a1a2e, navy).
+   */
+  backgroundColor?: string | null;
+  ctaLink: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?: {
+      relationTo: 'pages';
+      value: number | Page;
+    } | null;
+    url?: string | null;
+    label: string;
+    /**
+     * Choose how the link should be rendered.
+     */
+    appearance?: ('default' | 'outline') | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'gallery';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1226,6 +1291,7 @@ export interface PagesSelect<T extends boolean = true> {
         team?: T | TeamBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
         events?: T | EventsBlockSelect<T>;
+        gallery?: T | GalleryBlockSelect<T>;
       };
   meta?:
     | T
@@ -1308,6 +1374,7 @@ export interface ContentWithImageBlockSelect<T extends boolean = true> {
  * via the `definition` "TeamBlock_select".
  */
 export interface TeamBlockSelect<T extends boolean = true> {
+  variant?: T;
   title?: T;
   subtitle?: T;
   topContent?: T;
@@ -1329,6 +1396,17 @@ export interface TeamBlockSelect<T extends boolean = true> {
       };
   otherMembersTitle?: T;
   bottomContent?: T;
+  enableCta?: T;
+  ctaLink?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+        appearance?: T;
+      };
   id?: T;
   blockName?: T;
 }
@@ -1366,6 +1444,37 @@ export interface EventsBlockSelect<T extends boolean = true> {
         category?: T;
         categoryColor?: T;
         id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "GalleryBlock_select".
+ */
+export interface GalleryBlockSelect<T extends boolean = true> {
+  title?: T;
+  layout?: T;
+  columns?: T;
+  images?:
+    | T
+    | {
+        image?: T;
+        caption?: T;
+        alt?: T;
+        id?: T;
+      };
+  ctaTitle?: T;
+  backgroundColor?: T;
+  ctaLink?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+        appearance?: T;
       };
   id?: T;
   blockName?: T;
