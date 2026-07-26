@@ -7,6 +7,8 @@ import './globals.css'
 import './master.css'
 import { Footer } from '@/globals/Footer/Component'
 import { Header } from '@/globals/Header/Component'
+import { LocaleProvider } from '@/providers/Locale'
+import type { SupportedLocale } from '@/utilities/getLocale'
 
 export const metadata: Metadata = {
   description: 'A blank template using Payload in a Next.js app.',
@@ -21,11 +23,13 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang={lang} data-theme="light">
       <body>
-        <main>
-          <Header />
-          {children}
-          <Footer />
-        </main>
+        <LocaleProvider locale={lang as SupportedLocale}>
+          <main>
+            <Header />
+            {children}
+            <Footer />
+          </main>
+        </LocaleProvider>
       </body>
     </html>
   )

@@ -1,9 +1,15 @@
+'use client'
+
 import { Button, type ButtonProps } from '@/components/ui/button'
 import { cn } from '@/utilities/ui'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import React from 'react'
 
 import type { Page } from '@/payload-types'
+import { LANGUAGES } from '@/i18n/languages'
+
+const LOCALE_CODES = LANGUAGES.map((l) => l.code)
 
 const ARROW_APPEARANCES = new Set(['default', 'outline', 'link'])
 
@@ -24,6 +30,13 @@ type CMSLinkType = {
   url?: string | null
 }
 
+function addLocale(path: string, locale: string): string {
+  if (!path.startsWith('/') || path.startsWith('//')) return path
+  if (LOCALE_CODES.some((l) => path === `/${l}` || path.startsWith(`/${l}/`))) return path
+  if (path === '/') return `/${locale}`
+  return `/${locale}${path}`
+}
+
 export const CMSLink: React.FC<CMSLinkType> = (props) => {
   const {
     type,
@@ -39,12 +52,21 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
     url,
   } = props
 
-  const href =
+  const pathname = usePathname()
+  const locale = LOCALE_CODES.find(
+    (l) => pathname === `/${l}` || pathname.startsWith(`/${l}/`),
+  ) ?? 'en'
+
+  const rawHref =
     type === 'reference' && typeof reference?.value === 'object' && reference.value.slug
-      ? `${reference?.relationTo !== 'pages' ? `/${reference?.relationTo}` : ''}/${
-          reference.value.slug
-        }`
+      ? reference?.relationTo !== 'pages'
+        ? `/${reference.relationTo}/${reference.value.slug}`
+        : reference.value.slug === 'home'
+          ? '/'
+          : `/${reference.value.slug}`
       : url
+
+  const href = rawHref ? addLocale(rawHref, locale) : null
 
   if (!href) return null
 
@@ -54,7 +76,7 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
 
   if (appearance === 'inline') {
     return (
-      <Link className={cn(className)} href={href || url || ''} onClick={onClick} {...newTabProps}>
+      <Link className={cn(className)} href={href} onClick={onClick} {...newTabProps}>
         {label && label}
         {children && children}
       </Link>
@@ -63,7 +85,7 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
 
   return (
     <Button asChild showArrow={false} className={className} size={size} variant={appearance}>
-      <Link className={cn(className)} href={href || url || ''} onClick={onClick} {...newTabProps}>
+      <Link className={cn(className)} href={href} onClick={onClick} {...newTabProps}>
         {label && label}
         {children && children}
         {showArrow && size !== 'icon' && (

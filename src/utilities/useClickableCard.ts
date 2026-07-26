@@ -2,8 +2,8 @@
 import { RefObject, useEffect, useRef } from 'react'
 
 const useClickableCard = <T extends HTMLElement>(): {
-  card: { ref: RefObject<T> }
-  link: { ref: RefObject<HTMLAnchorElement> }
+  card: { ref: RefObject<T | null> }
+  link: { ref: RefObject<HTMLAnchorElement | null> }
 } => {
   const card = useRef<T>(null)
   const link = useRef<HTMLAnchorElement>(null)

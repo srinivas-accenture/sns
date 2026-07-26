@@ -32,6 +32,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
   const [scrolled, setScrolled] = useState(false)
   const { headerTheme, setHeaderTheme } = useHeaderTheme()
   const pathname = usePathname()
+  const locale = pathname.split('/')[1] || 'en'
 
   useEffect(() => {
     setHeaderTheme(null)
@@ -64,7 +65,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
       {/* ── Main bar ── */}
       <div className="container flex h-20 items-center gap-4">
         {/* Logo + optional site name text */}
-        <Link href="/" className="flex items-center gap-3 shrink-0 mr-4" aria-label="Home">
+        <Link href={`/${locale}`} className="flex items-center gap-3 shrink-0 mr-4" aria-label="Home">
           {logoMedia?.url ? (
             <img
               src={logoMedia.url}
@@ -90,7 +91,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
         {/* Desktop-only icons (hidden on mobile — they appear in the drawer instead) */}
         <div className="hidden md:flex items-center gap-1 ml-0">
           <Link
-            href="/search"
+            href={`/${locale}/search`}
             aria-label="Search"
             className="p-2 text-white/70 hover:text-white transition-colors rounded hover:bg-white/10"
           >
@@ -128,7 +129,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
           {/* Utility row — search / locale / theme */}
           <div className="flex items-center gap-2 border-t border-white/10 pt-3 mt-1 px-1">
             <Link
-              href="/search"
+              href={`/${locale}/search`}
               onClick={() => setMobileOpen(false)}
               aria-label="Search"
               className="flex items-center gap-2 px-3 py-2 text-sm text-white/80 hover:text-white hover:bg-white/10 rounded transition-colors"

@@ -85,7 +85,7 @@ export async function Footer() {
         <div className={`grid gap-10 ${hasContact ? 'md:grid-cols-3' : 'md:grid-cols-2'}`}>
           {/* Col 1 — Logo + tagline */}
           <div className="flex flex-col gap-4">
-            <Link href="/" className="inline-flex items-center">
+            <Link href={`/${locale}`} className="inline-flex items-center">
               {logoMedia?.url ? (
                 <img
                   src={logoMedia.url}

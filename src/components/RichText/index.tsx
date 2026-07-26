@@ -29,17 +29,12 @@ const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) 
   ...defaultConverters,
   ...LinkJSXConverter({ internalDocToHref }),
   blocks: {
-    mediaBlock: ({ node }) => (
-      <MediaBlock
-        className="col-start-1 col-span-3"
-        imgClassName="m-0"
-        {...(node.fields as Record<string, unknown>)}
-        captionClassName="mx-auto max-w-[48rem]"
-        enableGutter={false}
-        disableInnerContainer={true}
-      />
+    mediaBlock: ({ node }: { node: SerializedBlockNode<Record<string, unknown>> }) => (
+      <MediaBlock {...(node.fields as Parameters<typeof MediaBlock>[0])} />
     ),
-    cta: ({ node }) => <CallToActionBlock {...(node.fields as Record<string, unknown>)} />,
+    cta: ({ node }: { node: SerializedBlockNode<Record<string, unknown>> }) => (
+      <CallToActionBlock {...(node.fields as Record<string, unknown>)} />
+    ),
   },
 })
 
