@@ -1,4 +1,5 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
+import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import type { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
@@ -50,6 +51,18 @@ export default buildConfig({
     defaultLocale: DEFAULT_LANGUAGE_CODE,
     fallback: true,
   },
+  email: nodemailerAdapter({
+    defaultFromAddress: process.env.SMTP_FROM || 'noreply@example.com',
+    defaultFromName: process.env.SMTP_FROM_NAME || 'SNS',
+    transportOptions: {
+      host: process.env.SMTP_HOST,
+      port: Number(process.env.SMTP_PORT || 587),
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    },
+  }),
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

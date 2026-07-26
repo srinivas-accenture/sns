@@ -67,7 +67,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang={lang} data-theme="light" className={fontInfo.variable}>
       {/* Bridge: maps the specific font var to the generic --font-devanagari used in CSS */}
-      <style>{`:root { --font-devanagari: var(${fontInfo.cssVar}); }`}</style>
+      <style precedence="default" href={`devanagari-font-${fontKey}`}>{`:root { --font-devanagari: var(${fontInfo.cssVar}); }`}</style>
       <body>
         <LocaleProvider locale={lang as SupportedLocale}>
           <main>

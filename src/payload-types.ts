@@ -427,6 +427,7 @@ export interface Page {
           }
         | SliderBlock
         | ContentWithImageBlock
+        | TeamBlock
       )[]
     | null;
   meta?: {
@@ -576,6 +577,76 @@ export interface ContentWithImageBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'contentWithImage';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TeamBlock".
+ */
+export interface TeamBlock {
+  title?: string | null;
+  subtitle?: string | null;
+  /**
+   * Shown below the title, above the main team members.
+   */
+  topContent?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * First 4 members are featured with large portrait photos. Remaining members appear as compact name tiles.
+   */
+  members?:
+    | {
+        name: string;
+        role?: string | null;
+        bio?: string | null;
+        photo?: (number | null) | Media;
+        socialLinks?:
+          | {
+              platform: 'linkedin' | 'twitter' | 'github' | 'website';
+              url: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Heading for the secondary members section (appears when there are more than 4 members).
+   */
+  otherMembersTitle?: string | null;
+  /**
+   * Shown below all team members.
+   */
+  bottomContent?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'team';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -887,6 +958,7 @@ export interface PagesSelect<T extends boolean = true> {
             };
         slider?: T | SliderBlockSelect<T>;
         contentWithImage?: T | ContentWithImageBlockSelect<T>;
+        team?: T | TeamBlockSelect<T>;
       };
   meta?:
     | T
@@ -961,6 +1033,35 @@ export interface ContentWithImageBlockSelect<T extends boolean = true> {
         label?: T;
         appearance?: T;
       };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TeamBlock_select".
+ */
+export interface TeamBlockSelect<T extends boolean = true> {
+  title?: T;
+  subtitle?: T;
+  topContent?: T;
+  members?:
+    | T
+    | {
+        name?: T;
+        role?: T;
+        bio?: T;
+        photo?: T;
+        socialLinks?:
+          | T
+          | {
+              platform?: T;
+              url?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  otherMembersTitle?: T;
+  bottomContent?: T;
   id?: T;
   blockName?: T;
 }

@@ -1075,9 +1075,8 @@ main,
 .team-main-card {
   perspective: 1200px;
   position: relative;
-  /* Tall portrait — shows face + full body */
-  aspect-ratio: 3 / 4;
-  min-height: 320px;
+  aspect-ratio: 3 / 3;
+  min-height: 240px;
 }
 
 .team-main-card-inner {
@@ -1161,8 +1160,8 @@ main,
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 2.5rem 1.25rem 1.25rem;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.72) 0%, transparent 100%);
+  padding: 5rem 1.25rem 1.25rem;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.90) 0%, rgba(0, 0, 0, 0.65) 45%, rgba(0, 0, 0, 0.15) 80%, transparent 100%);
   color: #fff;
 }
 
@@ -1174,7 +1173,7 @@ main,
 }
 
 .team-main-member-role {
-  font-size: 0.8125rem;
+  font-size: 1rem;
   opacity: 0.8;
   margin-top: 0.25rem;
 }

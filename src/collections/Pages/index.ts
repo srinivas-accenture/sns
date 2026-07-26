@@ -5,6 +5,7 @@ import { ContentBlock } from '@/blocks/Content/config'
 import { ContentWithImage } from '@/blocks/ContentWithImage/config'
 import { MediaBlock } from '@/blocks/MediaBlock/config'
 import { Slider } from '@/blocks/Slider/config'
+import { Team } from '@/blocks/Team/config'
 import { heroField } from '@/heros/config'
 import { revalidateDelete, revalidatePage } from './hooks/revalidatePage'
 import { isAdminOrHigher } from '../../access/isAdminOrHigher'
@@ -99,7 +100,7 @@ export const Pages: CollectionConfig = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [ContentBlock, MediaBlock, CallToActionBlock, Slider, ContentWithImage],
+              blocks: [ContentBlock, MediaBlock, CallToActionBlock, Slider, ContentWithImage, Team],
               required: false,
             },
           ],

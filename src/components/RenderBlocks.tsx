@@ -5,6 +5,7 @@ import { ContentBlock } from '@/blocks/Content/Component'
 import { ContentWithImageBlock } from '@/blocks/ContentWithImage/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { SliderBlock } from '@/blocks/Slider/Component'
+import { TeamBlock } from '@/blocks/Team/Component'
 
 type LayoutBlock = {
   blockType: string
@@ -17,6 +18,7 @@ const blockComponents: Record<string, React.FC<any>> = {
   contentWithImage: ContentWithImageBlock,
   mediaBlock: MediaBlock,
   slider: SliderBlock,
+  team: TeamBlock,
 }
 
 export function RenderBlocks({ blocks }: { blocks: LayoutBlock[] }) {

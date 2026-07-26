@@ -143,7 +143,13 @@ export const Media: CollectionConfig = {
   ],
   upload: {
     staticDir: process.env.VERCEL ? '/tmp/media' : path.resolve(dirname, '../../public/media'),
-    adminThumbnail: 'thumbnail',
+    adminThumbnail: ({ doc }) => {
+      const cldId = doc.cloudinaryId as string | undefined
+      if (cldId && CLOUD_NAME) {
+        return buildCloudinaryUrl(CLOUD_NAME, cldId, 'c_scale,w_300')
+      }
+      return null
+    },
     focalPoint: true,
     imageSizes: [
       {
