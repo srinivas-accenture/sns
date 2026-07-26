@@ -11,6 +11,8 @@ import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Categories } from './collections/Categories'
+import { Footer } from './globals/Footer'
+import { Header } from './globals/Header'
 import { SiteSettings } from './globals/SiteSettings'
 import { DEFAULT_LANGUAGE_CODE, LANGUAGES } from './i18n/languages'
 
@@ -42,7 +44,7 @@ export default buildConfig({
     },
   },
   collections: [Users, Media, Pages, Categories],
-  globals: [SiteSettings],
+  globals: [Header, Footer, SiteSettings],
   localization: {
     locales: LANGUAGES.map(({ code, label }) => ({ code, label })),
     defaultLocale: DEFAULT_LANGUAGE_CODE,

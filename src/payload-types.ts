@@ -98,9 +98,13 @@ export interface Config {
   };
   fallbackLocale: ('false' | 'none' | 'null') | false | null | ('en' | 'mr') | ('en' | 'mr')[];
   globals: {
+    header: Header;
+    footer: Footer;
     'site-settings': SiteSetting;
   };
   globalsSelect: {
+    header: HeaderSelect<false> | HeaderSelect<true>;
+    footer: FooterSelect<false> | FooterSelect<true>;
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
   };
   locale: 'en' | 'mr';
@@ -820,6 +824,97 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "header".
+ */
+export interface Header {
+  id: number;
+  /**
+   * CSS color for the header bar (e.g. #3C1500). Leave blank for default.
+   */
+  backgroundColor?: string | null;
+  /**
+   * Site logo shown in the header. Falls back to the text logo if not set.
+   */
+  logo?: (number | null) | Media;
+  /**
+   * Optional text shown next to the logo image (e.g. "Swami Namasmarana Seva").
+   */
+  logoText?: string | null;
+  navItems?:
+    | {
+        link: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?: {
+            relationTo: 'pages';
+            value: number | Page;
+          } | null;
+          url?: string | null;
+          label: string;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer".
+ */
+export interface Footer {
+  id: number;
+  /**
+   * CSS color for the footer (e.g. #111827). Leave blank for default.
+   */
+  backgroundColor?: string | null;
+  /**
+   * Site logo shown in the footer. Falls back to the text logo if not set.
+   */
+  logo?: (number | null) | Media;
+  /**
+   * Short description shown below the logo.
+   */
+  tagline?: string | null;
+  /**
+   * Heading above the navigation links column.
+   */
+  navColumnLabel?: string | null;
+  navItems?:
+    | {
+        link: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?: {
+            relationTo: 'pages';
+            value: number | Page;
+          } | null;
+          url?: string | null;
+          label: string;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Heading above the contact info column.
+   */
+  contactColumnLabel?: string | null;
+  address?: string | null;
+  phone?: string | null;
+  email?: string | null;
+  /**
+   * e.g. Mon–Fri, 9 AM – 5 PM
+   */
+  hours?: string | null;
+  /**
+   * Bottom bar text. Use {year} for the current year.
+   */
+  copyrightText?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings".
  */
 export interface SiteSetting {
@@ -830,6 +925,65 @@ export interface SiteSetting {
   defaultLanguage?: ('en' | 'mr') | null;
   updatedAt?: string | null;
   createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "header_select".
+ */
+export interface HeaderSelect<T extends boolean = true> {
+  backgroundColor?: T;
+  logo?: T;
+  logoText?: T;
+  navItems?:
+    | T
+    | {
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+            };
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer_select".
+ */
+export interface FooterSelect<T extends boolean = true> {
+  backgroundColor?: T;
+  logo?: T;
+  tagline?: T;
+  navColumnLabel?: T;
+  navItems?:
+    | T
+    | {
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+            };
+        id?: T;
+      };
+  contactColumnLabel?: T;
+  address?: T;
+  phone?: T;
+  email?: T;
+  hours?: T;
+  copyrightText?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
