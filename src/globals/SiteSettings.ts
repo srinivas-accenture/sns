@@ -1,12 +1,22 @@
-import type { GlobalConfig } from 'payload'
+import type { GlobalAfterChangeHook, GlobalConfig } from 'payload'
+import { revalidateTag } from 'next/cache'
 
 import { DEFAULT_LANGUAGE_CODE, LANGUAGES } from '../i18n/languages'
+
+const revalidateSiteSettings: GlobalAfterChangeHook = ({ doc, req: { payload } }) => {
+  payload.logger.info('Revalidating site-settings cache')
+  revalidateTag('global_site-settings', 'max')
+  return doc
+}
 
 export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
   label: 'Site Settings',
   access: {
     read: () => true,
+  },
+  hooks: {
+    afterChange: [revalidateSiteSettings],
   },
   fields: [
     {
@@ -18,6 +28,21 @@ export const SiteSettings: GlobalConfig = {
       admin: {
         description:
           'The default language shown to website visitors. Defaults to English if not set.',
+      },
+    },
+    {
+      name: 'devanagariFont',
+      type: 'select',
+      label: 'Devanagari Font',
+      defaultValue: 'noto-sans-devanagari',
+      options: [
+        { label: 'Noto Sans Devanagari (default)', value: 'noto-sans-devanagari' },
+        { label: 'Mukta', value: 'mukta' },
+        { label: 'Hind', value: 'hind' },
+        { label: 'Tiro Devanagari Marathi', value: 'tiro-devanagari' },
+      ],
+      admin: {
+        description: 'Font applied to all Hindi and Marathi (Devanagari script) content.',
       },
     },
   ],

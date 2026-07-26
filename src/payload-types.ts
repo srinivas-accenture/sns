@@ -1128,6 +1128,10 @@ export interface SiteSetting {
    * The default language shown to website visitors. Defaults to English if not set.
    */
   defaultLanguage?: ('en' | 'mr') | null;
+  /**
+   * Font applied to all Hindi and Marathi (Devanagari script) content.
+   */
+  devanagariFont?: ('noto-sans-devanagari' | 'mukta' | 'hind' | 'tiro-devanagari') | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1196,6 +1200,7 @@ export interface FooterSelect<T extends boolean = true> {
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
   defaultLanguage?: T;
+  devanagariFont?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
