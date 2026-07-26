@@ -3,6 +3,7 @@ import type { CollectionConfig } from 'payload'
 import { CallToActionBlock } from '@/blocks/CallToAction/config'
 import { ContentBlock } from '@/blocks/Content/config'
 import { ContentWithImage } from '@/blocks/ContentWithImage/config'
+import { FormBlock } from '@/blocks/Form/config'
 import { MediaBlock } from '@/blocks/MediaBlock/config'
 import { Slider } from '@/blocks/Slider/config'
 import { Team } from '@/blocks/Team/config'
@@ -100,7 +101,7 @@ export const Pages: CollectionConfig = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [ContentBlock, MediaBlock, CallToActionBlock, Slider, ContentWithImage, Team],
+              blocks: [ContentBlock, MediaBlock, CallToActionBlock, Slider, ContentWithImage, Team, FormBlock],
               required: false,
             },
           ],

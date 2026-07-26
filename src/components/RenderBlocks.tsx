@@ -3,6 +3,7 @@ import React from 'react'
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
 import { ContentBlock } from '@/blocks/Content/Component'
 import { ContentWithImageBlock } from '@/blocks/ContentWithImage/Component'
+import { FormBlock } from '@/blocks/Form/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { SliderBlock } from '@/blocks/Slider/Component'
 import { TeamBlock } from '@/blocks/Team/Component'
@@ -16,6 +17,7 @@ const blockComponents: Record<string, React.FC<any>> = {
   cta: CallToActionBlock,
   content: ContentBlock,
   contentWithImage: ContentWithImageBlock,
+  formBlock: FormBlock,
   mediaBlock: MediaBlock,
   slider: SliderBlock,
   team: TeamBlock,
