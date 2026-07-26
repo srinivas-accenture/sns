@@ -11,6 +11,9 @@
 export const getMediaUrl = (url: string | null | undefined, cacheTag?: string | null): string => {
   if (!url) return ''
 
+  // Absolute URLs (e.g. Cloudinary CDN) are returned as-is — never append cache busters
+  if (url.startsWith('http://') || url.startsWith('https://')) return url
+
   if (cacheTag && cacheTag !== '') {
     cacheTag = encodeURIComponent(cacheTag)
   }

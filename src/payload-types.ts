@@ -426,6 +426,7 @@ export interface Page {
             blockType: 'cta';
           }
         | SliderBlock
+        | ContentWithImageBlock
       )[]
     | null;
   meta?: {
@@ -518,6 +519,63 @@ export interface SliderBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'slider';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContentWithImageBlock".
+ */
+export interface ContentWithImageBlock {
+  /**
+   * Where the image appears relative to the text content.
+   */
+  imagePosition: 'left' | 'right' | 'top' | 'bottom';
+  /**
+   * Shape applied to the image.
+   */
+  imageShape?: ('square' | 'circle') | null;
+  /**
+   * CSS color for the section background (e.g. #f9f5f0). Leave blank for white.
+   */
+  backgroundColor?: string | null;
+  image: number | Media;
+  /**
+   * Small label shown above the title (e.g. "About Us", "Features").
+   */
+  subtitle?: string | null;
+  title: string;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  enableLink?: boolean | null;
+  link?: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?: {
+      relationTo: 'pages';
+      value: number | Page;
+    } | null;
+    url?: string | null;
+    label: string;
+    /**
+     * Choose how the link should be rendered.
+     */
+    appearance?: ('default' | 'outline') | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'contentWithImage';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -828,6 +886,7 @@ export interface PagesSelect<T extends boolean = true> {
               blockName?: T;
             };
         slider?: T | SliderBlockSelect<T>;
+        contentWithImage?: T | ContentWithImageBlockSelect<T>;
       };
   meta?:
     | T
@@ -875,6 +934,32 @@ export interface SliderBlockSelect<T extends boolean = true> {
               appearance?: T;
             };
         id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContentWithImageBlock_select".
+ */
+export interface ContentWithImageBlockSelect<T extends boolean = true> {
+  imagePosition?: T;
+  imageShape?: T;
+  backgroundColor?: T;
+  image?: T;
+  subtitle?: T;
+  title?: T;
+  description?: T;
+  enableLink?: T;
+  link?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+        appearance?: T;
       };
   id?: T;
   blockName?: T;

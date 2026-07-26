@@ -76,7 +76,7 @@ export const Media: CollectionConfig = {
         const cloudinaryId: string | undefined = doc.cloudinaryId
         if (!cloudinaryId) return doc
 
-        const url = buildCloudinaryUrl(CLOUD_NAME!, cloudinaryId)
+        const url = buildCloudinaryUrl(CLOUD_NAME!, cloudinaryId, 'f_auto,q_auto')
 
         // Override each size entry with a Cloudinary on-the-fly transformation URL
         const sizes: Record<string, unknown> = {}

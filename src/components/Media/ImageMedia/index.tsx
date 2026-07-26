@@ -79,12 +79,20 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
 
   const loading = loadingFromProps || (!priority ? 'lazy' : undefined)
 
-  // NOTE: this is used by the browser to determine which image to download at different screen sizes
-  const sizes = sizeFromProps
-    ? sizeFromProps
-    : Object.entries(breakpoints)
-        .map(([, value]) => `(max-width: ${value}px) ${value * 2}w`)
-        .join(', ')
+  // Cloudinary (and other CDN) URLs are already optimised — skip Next.js /_next/image
+  const srcString = typeof src === 'string' ? src : ''
+  const isAbsoluteUrl = srcString.startsWith('http://') || srcString.startsWith('https://')
+
+  // `sizes` only matters when Next.js generates a srcset (i.e. not unoptimized)
+  const sizes = isAbsoluteUrl
+    ? undefined
+    : sizeFromProps
+      ? sizeFromProps
+      : fill
+        ? '100vw'
+        : Object.entries(breakpoints)
+            .map(([, value]) => `(max-width: ${value}px) ${value * 2}w`)
+            .join(', ')
 
   return (
     <picture
@@ -103,6 +111,7 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
         loading={loading}
         sizes={sizes}
         src={src}
+        unoptimized={isAbsoluteUrl}
         width={!fill ? width : undefined}
       />
     </picture>

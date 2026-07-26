@@ -2,6 +2,7 @@ import React from 'react'
 
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
 import { ContentBlock } from '@/blocks/Content/Component'
+import { ContentWithImageBlock } from '@/blocks/ContentWithImage/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { SliderBlock } from '@/blocks/Slider/Component'
 
@@ -13,6 +14,7 @@ type LayoutBlock = {
 const blockComponents: Record<string, React.FC<any>> = {
   cta: CallToActionBlock,
   content: ContentBlock,
+  contentWithImage: ContentWithImageBlock,
   mediaBlock: MediaBlock,
   slider: SliderBlock,
 }
