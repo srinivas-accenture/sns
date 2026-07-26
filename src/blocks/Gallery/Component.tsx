@@ -4,7 +4,6 @@ import type { GalleryBlock as GalleryBlockProps, Media as MediaType } from '@/pa
 import React, { useEffect, useRef, useState } from 'react'
 import { ChevronLeft, ChevronRight, X, Play } from 'lucide-react'
 import { CMSLink } from '@/components/Link'
-import { isLightBackground } from '@/utilities/colorContrast'
 import { cn } from '@/utilities/ui'
 
 type GalleryImage = NonNullable<GalleryBlockProps['images']>[0]
@@ -46,7 +45,6 @@ export const GalleryBlock: React.FC<Props> = ({
 
   const count = items.length
   const hasCta = !!ctaTitle?.trim()
-  const isLight = isLightBackground(backgroundColor)
 
   function scroll(dir: -1 | 1) {
     const el = trackRef.current
@@ -208,13 +206,13 @@ export const GalleryBlock: React.FC<Props> = ({
         {/* CTA strip */}
         {hasCta && (
           <div
-            className="cms-bg w-full py-20 lg:py-[7.5rem]"
-            style={{ '--cms-bg': backgroundColor || '#3C1500' } as React.CSSProperties}
+            className="cms-bg w-full"
+            style={{ '--cms-bg': backgroundColor || '#3C1500', padding: '2rem 0' } as React.CSSProperties}
           >
             <div className="container flex flex-col items-center gap-6 text-center">
               <h3
                 className="text-2xl font-extrabold uppercase leading-tight tracking-wide md:text-3xl lg:text-4xl"
-                style={{ color: isLight ? undefined : '#ffffff' }}
+                style={{ color: '#ffffff' }}
               >
                 {ctaTitle}
               </h3>
@@ -222,11 +220,7 @@ export const GalleryBlock: React.FC<Props> = ({
                 <CMSLink
                   {...ctaLink}
                   appearance="outline"
-                  className={cn(
-                    isLight ? 'border-foreground text-foreground hover:bg-foreground hover:text-white'
-                             : 'border-white hover:bg-white hover:text-foreground',
-                  )}
-                  style={isLight ? undefined : { color: '#ffffff', borderColor: '#ffffff' }}
+                  className="cta-strip-btn"
                 />
               )}
             </div>

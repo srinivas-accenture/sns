@@ -924,6 +924,35 @@ main,
   background-color: var(--cms-bg, var(--section-bg, transparent));
 }
 
+/* Events block — responsive grid */
+.events-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 640px) {
+  .events-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 1024px) {
+  .events-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Outline button on a dark/colored CTA strip */
+.cta-strip-btn {
+  color: #ffffff;
+  border-color: #ffffff;
+  transition: background-color 0.2s, color 0.2s;
+}
+.cta-strip-btn:hover {
+  background-color: #ffffff;
+  color: #1a1a1a;
+  border-color: #ffffff;
+}
+
 /* ────────────────────────────────────────────────────────────────────────── */
 
 /* Classes toggled by JS IntersectionObserver */
