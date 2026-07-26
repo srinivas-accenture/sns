@@ -433,6 +433,7 @@ export interface Page {
         | ContentWithImageBlock
         | TeamBlock
         | FormBlock
+        | EventsBlock
       )[]
     | null;
   meta?: {
@@ -858,6 +859,37 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "EventsBlock".
+ */
+export interface EventsBlock {
+  title?: string | null;
+  /**
+   * CSS color (e.g. #111827). Leave blank for dark default.
+   */
+  backgroundColor?: string | null;
+  subtitle?: string | null;
+  events?:
+    | {
+        title: string;
+        description?: string | null;
+        date: string;
+        time?: string | null;
+        location?: string | null;
+        /**
+         * Paste a Google Maps share link.
+         */
+        mapUrl?: string | null;
+        category?: string | null;
+        categoryColor?: ('blue' | 'green' | 'purple' | 'orange' | 'red' | 'gray') | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'events';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "categories".
  */
 export interface Category {
@@ -1193,6 +1225,7 @@ export interface PagesSelect<T extends boolean = true> {
         contentWithImage?: T | ContentWithImageBlockSelect<T>;
         team?: T | TeamBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
+        events?: T | EventsBlockSelect<T>;
       };
   meta?:
     | T
@@ -1310,6 +1343,30 @@ export interface FormBlockSelect<T extends boolean = true> {
   imagePosition?: T;
   enableIntro?: T;
   introContent?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "EventsBlock_select".
+ */
+export interface EventsBlockSelect<T extends boolean = true> {
+  title?: T;
+  backgroundColor?: T;
+  subtitle?: T;
+  events?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        date?: T;
+        time?: T;
+        location?: T;
+        mapUrl?: T;
+        category?: T;
+        categoryColor?: T;
+        id?: T;
+      };
   id?: T;
   blockName?: T;
 }

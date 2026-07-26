@@ -1,5 +1,5 @@
 import React from 'react'
-import { RichText } from '@payloadcms/richtext-lexical/react'
+import RichText from '@/components/RichText'
 
 const columnWidthClass: Record<string, string> = {
   oneThird: 'w-full md:w-1/3',
@@ -34,9 +34,7 @@ export function ContentBlock({ columns }: ContentBlockProps) {
         {columns.map((col, i) => (
           <div key={i} className={columnWidthClass[col.size ?? 'full'] ?? 'w-full'}>
             {col.richText && (
-              <div className="prose max-w-none">
-                <RichText data={col.richText} />
-              </div>
+              <RichText data={col.richText} enableGutter={false} />
             )}
             {col.enableLink && col.link?.label && (
               <a

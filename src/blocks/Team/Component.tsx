@@ -196,7 +196,7 @@ export const TeamBlock: React.FC<Props> = ({
   const otherMembers = members.slice(4)
 
   return (
-    <div className={cn('container', className)}>
+    <div className={cn('container py-20 lg:py-[7.5rem]', className)}>
       {/* Section header */}
       {(title || subtitle) && (
         <AnimateIn variant="fade-up">

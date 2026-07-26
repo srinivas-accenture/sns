@@ -902,6 +902,24 @@ main,
 /* ── CMS-configurable colour sections ───────────────────────────────────────
    Components set --cms-bg via a CSS custom-property inline style.
    The property itself lives here so no CSS properties appear in JSX.        */
+/* ── Alternating section backgrounds ───────────────────────────────────────
+   Odd sections: white. Even sections: soft gray.
+   --section-bg is inherited by .cms-bg children so CMS-set colors still
+   take priority via --cms-bg; blocks without cms-bg use the wrapper bg. */
+.block-section {
+  width: 100%;
+}
+
+.block-section:nth-child(odd) {
+  --section-bg: var(--color-background, #ffffff);
+  background-color: var(--section-bg);
+}
+
+.block-section:nth-child(even) {
+  --section-bg: var(--color-muted, #f3f4f6);
+  background-color: var(--section-bg);
+}
+
 .cms-bg {
   background-color: var(--cms-bg, var(--section-bg, transparent));
 }
