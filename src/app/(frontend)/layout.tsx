@@ -7,6 +7,8 @@ import { DEFAULT_LANGUAGE_CODE } from '@/i18n/languages'
 import { Footer } from '@/globals/Footer/Component'
 import { Header } from '@/globals/Header/Component'
 import { LocaleProvider } from '@/providers/Locale'
+import { ThemeProvider } from '@/providers/Theme'
+import { InitTheme } from '@/providers/Theme/InitTheme'
 import { getCachedGlobal } from '@/utilities/getGlobals'
 import type { SupportedLocale } from '@/utilities/getLocale'
 import './globals.css'
@@ -65,17 +67,20 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
   const fontInfo = DEVANAGARI_FONT_MAP[fontKey] ?? DEVANAGARI_FONT_MAP['noto-sans-devanagari']!
 
   return (
-    <html lang={lang} data-theme="light" className={fontInfo.variable}>
+    <html lang={lang} className={fontInfo.variable}>
+      <InitTheme />
       {/* Bridge: maps the specific font var to the generic --font-devanagari used in CSS */}
       <style precedence="default" href={`devanagari-font-${fontKey}`}>{`:root { --font-devanagari: var(${fontInfo.cssVar}); }`}</style>
       <body>
-        <LocaleProvider locale={lang as SupportedLocale}>
-          <main>
-            <Header />
-            {children}
-            <Footer />
-          </main>
-        </LocaleProvider>
+        <ThemeProvider>
+          <LocaleProvider locale={lang as SupportedLocale}>
+            <main>
+              <Header />
+              {children}
+              <Footer />
+            </main>
+          </LocaleProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

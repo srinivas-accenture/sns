@@ -8,7 +8,6 @@ import type { SupportedLocale } from '@/utilities/getLocale'
 
 const LOCALES: { code: SupportedLocale; label: string; fullLabel: string }[] = [
   { code: 'en', label: 'EN', fullLabel: 'English' },
-  { code: 'hi', label: 'हि', fullLabel: 'हिंदी' },
   { code: 'mr', label: 'म', fullLabel: 'मराठी' },
 ]
 
@@ -67,11 +66,20 @@ export function LocaleToggle() {
         aria-haspopup="menu"
         aria-expanded={open}
         aria-label={`Language: ${current.fullLabel}`}
-        className="flex items-center gap-1 px-2 py-1 text-xs font-medium text-white/70 hover:text-white rounded transition-colors hover:bg-white/10"
+        className="flex items-center gap-1 px-3 py-1.5 font-semibold text-white/70 hover:text-white rounded transition-colors hover:bg-white/10"
+        style={{ fontSize: '0.9375rem' }}
       >
-        {current.label}
+        <span style={current.code !== 'en' ? { fontSize: '1.1875rem' } : undefined}>
+          {current.label}
+        </span>
         <svg
-          className={`w-3 h-3 transition-transform duration-150 ${open ? 'rotate-180' : ''}`}
+          style={{
+            width: '0.875rem',
+            height: '0.875rem',
+            flexShrink: 0,
+            transition: 'transform 150ms',
+            transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
+          }}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"

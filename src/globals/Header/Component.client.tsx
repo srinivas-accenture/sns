@@ -11,7 +11,7 @@ import { Logo } from '@/components/Logo/Logo'
 import { HeaderNav } from './Nav'
 import { ThemeToggle } from './ThemeToggle'
 import { LocaleToggle, LocaleToggleInline } from '@/components/LocaleToggle'
-import { SearchIcon, MenuIcon, XIcon } from 'lucide-react'
+import { MenuIcon, XIcon } from 'lucide-react'
 import { cn } from '@/utilities/ui'
 
 interface HeaderClientProps {
@@ -90,13 +90,6 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
 
         {/* Desktop-only icons (hidden on mobile — they appear in the drawer instead) */}
         <div className="hidden md:flex items-center gap-1 ml-0">
-          <Link
-            href={`/${locale}/search`}
-            aria-label="Search"
-            className="p-2 text-white/70 hover:text-white transition-colors rounded hover:bg-white/10"
-          >
-            <SearchIcon className="w-5 h-5" />
-          </Link>
           <LocaleToggle />
           <ThemeToggle />
         </div>
@@ -126,17 +119,8 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
         <div className="container space-y-1">
           <HeaderNav data={data} mobile onLinkClick={() => setMobileOpen(false)} />
 
-          {/* Utility row — search / locale / theme */}
+          {/* Utility row — locale / theme */}
           <div className="flex items-center gap-2 border-t border-white/10 pt-3 mt-1 px-1">
-            <Link
-              href={`/${locale}/search`}
-              onClick={() => setMobileOpen(false)}
-              aria-label="Search"
-              className="flex items-center gap-2 px-3 py-2 text-sm text-white/80 hover:text-white hover:bg-white/10 rounded transition-colors"
-            >
-              <SearchIcon className="w-5 h-5" />
-              <span>Search</span>
-            </Link>
             <div className="ml-auto flex items-center gap-2">
               <LocaleToggleInline onSelect={() => setMobileOpen(false)} />
               <ThemeToggle />
