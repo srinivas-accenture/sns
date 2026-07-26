@@ -435,6 +435,7 @@ export interface Page {
         | FormBlock
         | EventsBlock
         | GalleryBlock
+        | FAQBlock
       )[]
     | null;
   meta?: {
@@ -955,6 +956,50 @@ export interface GalleryBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FAQBlock".
+ */
+export interface FAQBlock {
+  /**
+   * CSS color for the section background (e.g. #f9f5f0). Leave blank for default.
+   */
+  backgroundColor?: string | null;
+  /**
+   * Side for the optional image (only applies when an image is uploaded).
+   */
+  imagePosition?: ('left' | 'right') | null;
+  title?: string | null;
+  subtitle?: string | null;
+  /**
+   * Optional image shown beside the FAQ. Leave blank for a centred layout.
+   */
+  image?: (number | null) | Media;
+  items?:
+    | {
+        question: string;
+        answer: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'faq';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "categories".
  */
 export interface Category {
@@ -1292,6 +1337,7 @@ export interface PagesSelect<T extends boolean = true> {
         formBlock?: T | FormBlockSelect<T>;
         events?: T | EventsBlockSelect<T>;
         gallery?: T | GalleryBlockSelect<T>;
+        faq?: T | FAQBlockSelect<T>;
       };
   meta?:
     | T
@@ -1475,6 +1521,26 @@ export interface GalleryBlockSelect<T extends boolean = true> {
         url?: T;
         label?: T;
         appearance?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FAQBlock_select".
+ */
+export interface FAQBlockSelect<T extends boolean = true> {
+  backgroundColor?: T;
+  imagePosition?: T;
+  title?: T;
+  subtitle?: T;
+  image?: T;
+  items?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
       };
   id?: T;
   blockName?: T;

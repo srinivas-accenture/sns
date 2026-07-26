@@ -4,6 +4,7 @@ import { CallToActionBlock } from '@/blocks/CallToAction/Component'
 import { ContentBlock } from '@/blocks/Content/Component'
 import { ContentWithImageBlock } from '@/blocks/ContentWithImage/Component'
 import { EventsBlock } from '@/blocks/Events/Component'
+import { FAQBlock } from '@/blocks/FAQ/Component'
 import { FormBlock } from '@/blocks/Form/Component'
 import { GalleryBlock } from '@/blocks/Gallery/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
@@ -20,6 +21,7 @@ const blockComponents: Record<string, React.FC<any>> = {
   content: ContentBlock,
   contentWithImage: ContentWithImageBlock,
   events: EventsBlock,
+  faq: FAQBlock,
   formBlock: FormBlock,
   gallery: GalleryBlock,
   mediaBlock: MediaBlock,

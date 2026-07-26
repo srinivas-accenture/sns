@@ -7,6 +7,7 @@
   "scripts": {
     "build": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build && next-sitemap --config next-sitemap.config.cjs",
     "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev",
+    "dev:prod": "dotenv -e .env.production -- cross-env NODE_OPTIONS=--no-deprecation next dev",
     "devsafe": "rm -rf .next && cross-env NODE_OPTIONS=--no-deprecation next dev",
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
     "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
@@ -16,6 +17,7 @@
     "migrate:create:prod": "dotenv -e .env.production -- cross-env NODE_OPTIONS=--no-deprecation payload migrate:create",
     "migrate:local": "dotenv -e .env.local -- cross-env NODE_OPTIONS=--no-deprecation payload migrate",
     "migrate:prod": "dotenv -e .env.production -- cross-env NODE_OPTIONS=--no-deprecation payload migrate",
+    "migrate:fresh:prod": "dotenv -e .env.production -- cross-env NODE_OPTIONS=--no-deprecation payload migrate:fresh",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
     "test": "pnpm run test:int && pnpm run test:e2e",
     "test:e2e": "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" playwright test --config=playwright.config.ts",
