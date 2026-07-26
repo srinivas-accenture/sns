@@ -2,7 +2,7 @@
 
 ## Adapter
 
-`@payloadcms/db-postgres` connecting via `DATABASE_URL` env var (set in `.env`).
+`@payloadcms/db-postgres` connecting via `DATABASE_URL` env var.
 
 ```ts
 // src/payload.config.ts
@@ -12,15 +12,37 @@ db: postgresAdapter({
 })
 ```
 
+## Environment files
+
+| File | Purpose | Committed? |
+| --- | --- | --- |
+| `.env.local` | Local development DB | No (git-ignored) |
+| `.env.production` | Production DB | No (git-ignored) |
+| `.env.example` | Template with all keys, no values | Yes |
+
+Copy `.env.example` to `.env.local` or `.env.production` and fill in `DATABASE_URL`.
+
 ## Migration workflow
 
 Run these commands in order after **any** schema change (new collection, new field,
-new global, enabling localization on an existing field, etc.):
+new global, enabling localization on an existing field, etc.).
+
+**Choose the target environment:**
 
 ```bash
-pnpm payload migrate:create   # diff schema → generate migration file in src/migrations/
-pnpm payload migrate          # apply pending migrations to the DB
-pnpm generate:types           # regenerate src/payload-types.ts
+# Local DB
+pnpm migrate:create:local   # diff schema → generate migration file in src/migrations/
+pnpm migrate:local          # apply pending migrations to local DB
+
+# Production DB
+pnpm migrate:create:prod    # diff schema → generate migration file in src/migrations/
+pnpm migrate:prod           # apply pending migrations to production DB
+```
+
+Then always regenerate types:
+
+```bash
+pnpm generate:types         # regenerate src/payload-types.ts
 ```
 
 `pnpm generate:types` is important — it updates the TypeScript types that pages and
