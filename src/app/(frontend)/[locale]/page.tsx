@@ -21,6 +21,7 @@ async function getHomePage(locale: string) {
     where: { slug: { equals: 'home' } },
     locale: locale as 'en' | 'mr',
     limit: 1,
+    depth: 2,
     draft: false,
   })
   return result.docs[0] ?? null

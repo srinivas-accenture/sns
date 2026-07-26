@@ -41,6 +41,7 @@ async function getPage(slug: string, locale: string) {
     where: { slug: { equals: slug } },
     locale: locale as 'en' | 'mr',
     limit: 1,
+    depth: 2,
     draft: false,
   })
   return result.docs[0] ?? null

@@ -4,6 +4,7 @@ import React from 'react'
 
 import { DEFAULT_LANGUAGE_CODE } from '@/i18n/languages'
 import './globals.css'
+import './master.css'
 import { Footer } from '@/globals/Footer/Component'
 import { Header } from '@/globals/Header/Component'
 
