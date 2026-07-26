@@ -13,6 +13,7 @@ const staticDir = process.env.VERCEL ? '/tmp/media' : path.resolve(process.cwd()
 export async function uploadToCloudinary(
   filename: string,
   publicId: string,
+  extraFilenames: string[] = [],
 ): Promise<string | null> {
   const filePath = path.join(staticDir, filename)
   if (!fs.existsSync(filePath)) return null
@@ -23,11 +24,13 @@ export async function uploadToCloudinary(
     resource_type: 'auto',
   })
 
-  // Remove the local copy — Cloudinary is the permanent store
-  try {
-    fs.unlinkSync(filePath)
-  } catch {
-    // non-fatal: file may have already been removed
+  // Remove the original + all size variants — Cloudinary is the permanent store
+  for (const name of [filename, ...extraFilenames]) {
+    try {
+      fs.unlinkSync(path.join(staticDir, name))
+    } catch {
+      // non-fatal: file may already be gone
+    }
   }
 
   return result.secure_url

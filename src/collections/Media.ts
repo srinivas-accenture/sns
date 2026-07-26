@@ -49,7 +49,15 @@ export const Media: CollectionConfig = {
 
         try {
           const publicId = cldPublicId(doc.id)
-          const uploaded = await uploadToCloudinary(doc.filename, publicId)
+
+          // Collect filenames of all generated size variants so they're removed after upload
+          const sizeFilenames = Object.values(
+            (doc.sizes ?? {}) as Record<string, { filename?: string }>,
+          )
+            .map((s) => s?.filename)
+            .filter((f): f is string => Boolean(f))
+
+          const uploaded = await uploadToCloudinary(doc.filename, publicId, sizeFilenames)
           if (!uploaded) return doc
 
           // Store the cloudinaryId; afterRead will derive the URL from it
