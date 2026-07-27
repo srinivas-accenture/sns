@@ -919,7 +919,14 @@ export interface GalleryBlock {
   columns?: ('2' | '3' | '4') | null;
   images?:
     | {
-        image: number | Media;
+        /**
+         * Paste an Instagram post or reel URL (e.g. https://www.instagram.com/p/ABC123/). When set, the upload below is ignored.
+         */
+        instagramUrl?: string | null;
+        /**
+         * Used when no Instagram URL is set above.
+         */
+        image?: (number | null) | Media;
         caption?: string | null;
         /**
          * Alt text for accessibility (defaults to image alt if empty).
@@ -1505,6 +1512,7 @@ export interface GalleryBlockSelect<T extends boolean = true> {
   images?:
     | T
     | {
+        instagramUrl?: T;
         image?: T;
         caption?: T;
         alt?: T;

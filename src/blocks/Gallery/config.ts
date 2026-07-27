@@ -51,10 +51,22 @@ export const Gallery: Block = {
       admin: { initCollapsed: true },
       fields: [
         {
+          name: 'instagramUrl',
+          type: 'text',
+          label: 'Instagram URL',
+          admin: {
+            description: 'Paste an Instagram post or reel URL (e.g. https://www.instagram.com/p/ABC123/). When set, the upload below is ignored.',
+            placeholder: 'https://www.instagram.com/p/...',
+          },
+        },
+        {
           name: 'image',
           type: 'upload',
           relationTo: 'media',
-          required: true,
+          admin: {
+            description: 'Used when no Instagram URL is set above.',
+            condition: (_, siblingData) => !siblingData?.instagramUrl,
+          },
         },
         {
           name: 'caption',

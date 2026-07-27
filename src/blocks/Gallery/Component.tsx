@@ -29,6 +29,40 @@ function isVideo(image: number | MediaType | null | undefined): boolean {
   return typeof image.mimeType === 'string' && image.mimeType.startsWith('video/')
 }
 
+function getInstagramPostId(url: string): string | null {
+  const match = url.match(/instagram\.com\/(?:p|reel|tv)\/([A-Za-z0-9_-]+)/)
+  return match ? match[1] : null
+}
+
+function InstagramThumbnail({ caption }: { caption?: string | null }) {
+  return (
+    <>
+      <div style={{
+        width: '100%', height: '100%',
+        background: 'linear-gradient(135deg, #833AB4 0%, #FD1D1D 50%, #FCAF45 100%)',
+        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 10,
+      }}>
+        {/* Instagram logo */}
+        <svg viewBox="0 0 24 24" width={40} height={40} fill="none" stroke="#fff" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+          <circle cx="12" cy="12" r="4" />
+          <circle cx="17.5" cy="6.5" r="1" fill="#fff" stroke="none" />
+        </svg>
+        <Play size={28} color="#fff" fill="#fff" />
+      </div>
+      <div style={{
+        position: 'absolute', bottom: 0, left: 0, right: 0,
+        background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, transparent 100%)',
+        padding: '40px 14px 14px', pointerEvents: 'none',
+      }}>
+        {caption && (
+          <p style={{ margin: 0, color: '#fff', fontSize: 13, fontWeight: 500, lineHeight: 1.4 }}>{caption}</p>
+        )}
+      </div>
+    </>
+  )
+}
+
 export const GalleryBlock: React.FC<Props> = ({
   title,
   images,
@@ -120,6 +154,7 @@ export const GalleryBlock: React.FC<Props> = ({
             }}
           >
             {items.map((item, i) => {
+              const igUrl = item.instagramUrl
               const src = getUrl(item.image)
               const video = isVideo(item.image)
               return (
@@ -139,7 +174,9 @@ export const GalleryBlock: React.FC<Props> = ({
                     position: 'relative',
                   }}
                 >
-                  {src ? (
+                  {igUrl ? (
+                    <InstagramThumbnail caption={item.caption} />
+                  ) : src ? (
                     video ? (
                       <>
                         <video
@@ -168,19 +205,21 @@ export const GalleryBlock: React.FC<Props> = ({
                     <div style={{ width: '100%', height: '100%', background: '#e5e7eb' }} />
                   )}
 
-                  {/* Gradient overlay — always visible, caption on top if set */}
-                  <div style={{
-                    position: 'absolute', bottom: 0, left: 0, right: 0,
-                    background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, transparent 100%)',
-                    padding: '40px 14px 14px',
-                    pointerEvents: 'none',
-                  }}>
-                    {item.caption && (
-                      <p style={{ margin: 0, color: '#fff', fontSize: 13, fontWeight: 500, lineHeight: 1.4 }}>
-                        {item.caption}
-                      </p>
-                    )}
-                  </div>
+                  {/* Gradient overlay for media items */}
+                  {!igUrl && (
+                    <div style={{
+                      position: 'absolute', bottom: 0, left: 0, right: 0,
+                      background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, transparent 100%)',
+                      padding: '40px 14px 14px',
+                      pointerEvents: 'none',
+                    }}>
+                      {item.caption && (
+                        <p style={{ margin: 0, color: '#fff', fontSize: 13, fontWeight: 500, lineHeight: 1.4 }}>
+                          {item.caption}
+                        </p>
+                      )}
+                    </div>
+                  )}
                 </div>
               )
             })}
@@ -277,23 +316,38 @@ export const GalleryBlock: React.FC<Props> = ({
                 </button>
               )}
 
-              {src && (
-                video ? (
-                  <video
-                    src={src}
-                    controls
-                    autoPlay
-                    style={{ maxWidth: '90vw', maxHeight: '78vh', borderRadius: 8, background: '#000' }}
-                    onClick={e => e.stopPropagation()}
-                  />
-                ) : (
-                  <img
-                    src={src}
-                    alt={getAlt(item)}
-                    style={{ maxWidth: '90vw', maxHeight: '78vh', objectFit: 'contain', borderRadius: 8, display: 'block' }}
-                  />
-                )
-              )}
+              {(() => {
+                const igUrl = item.instagramUrl
+                if (igUrl) {
+                  const postId = getInstagramPostId(igUrl)
+                  return postId ? (
+                    <iframe
+                      src={`https://www.instagram.com/p/${postId}/embed/`}
+                      style={{ width: 400, height: 480, maxWidth: '90vw', maxHeight: '78vh', borderRadius: 8, border: 'none', background: '#fff' }}
+                      allowFullScreen
+                      scrolling="no"
+                      onClick={e => e.stopPropagation()}
+                    />
+                  ) : null
+                }
+                return src ? (
+                  video ? (
+                    <video
+                      src={src}
+                      controls
+                      autoPlay
+                      style={{ maxWidth: '90vw', maxHeight: '78vh', borderRadius: 8, background: '#000' }}
+                      onClick={e => e.stopPropagation()}
+                    />
+                  ) : (
+                    <img
+                      src={src}
+                      alt={getAlt(item)}
+                      style={{ maxWidth: '90vw', maxHeight: '78vh', objectFit: 'contain', borderRadius: 8, display: 'block' }}
+                    />
+                  )
+                ) : null
+              })()}
 
               {/* Next */}
               {count > 1 && (
