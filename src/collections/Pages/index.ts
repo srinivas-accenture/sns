@@ -104,6 +104,7 @@ export const Pages: CollectionConfig = {
             {
               name: 'layout',
               type: 'blocks',
+              localized: true,
               blocks: [ContentBlock, MediaBlock, CallToActionBlock, Slider, ContentWithImage, Team, FormBlock, Events, Gallery, FAQ],
               required: false,
             },
