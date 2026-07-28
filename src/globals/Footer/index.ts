@@ -109,6 +109,40 @@ export const Footer: GlobalConfig = {
         description: 'Bottom bar text. Use {year} for the current year.',
       },
     },
+    {
+      name: 'socialLinks',
+      type: 'array',
+      label: 'Social Media Links',
+      maxRows: 8,
+      admin: {
+        description: 'Icons shown in the footer bottom bar next to the copyright.',
+        initCollapsed: true,
+      },
+      fields: [
+        {
+          name: 'platform',
+          type: 'select',
+          required: true,
+          label: 'Platform',
+          options: [
+            { label: 'Facebook', value: 'facebook' },
+            { label: 'Instagram', value: 'instagram' },
+            { label: 'Twitter / X', value: 'twitter' },
+            { label: 'YouTube', value: 'youtube' },
+            { label: 'LinkedIn', value: 'linkedin' },
+            { label: 'WhatsApp', value: 'whatsapp' },
+            { label: 'Telegram', value: 'telegram' },
+            { label: 'Website', value: 'website' },
+          ],
+        },
+        {
+          name: 'url',
+          type: 'text',
+          required: true,
+          label: 'URL',
+        },
+      ],
+    },
   ],
   hooks: {
     afterChange: [revalidateFooter],

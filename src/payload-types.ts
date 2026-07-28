@@ -1853,6 +1853,16 @@ export interface Footer {
    * Bottom bar text. Use {year} for the current year.
    */
   copyrightText?: string | null;
+  /**
+   * Icons shown in the footer bottom bar next to the copyright.
+   */
+  socialLinks?:
+    | {
+        platform: 'facebook' | 'instagram' | 'twitter' | 'youtube' | 'linkedin' | 'whatsapp' | 'telegram' | 'website';
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1866,6 +1876,10 @@ export interface SiteSetting {
    * The default language shown to website visitors. Defaults to English if not set.
    */
   defaultLanguage?: ('en' | 'mr') | null;
+  /**
+   * e.g. G-XXXXXXXXXX — leave blank to disable analytics.
+   */
+  googleAnalyticsId?: string | null;
   /**
    * Font applied to all Hindi and Marathi (Devanagari script) content.
    */
@@ -1928,6 +1942,13 @@ export interface FooterSelect<T extends boolean = true> {
   email?: T;
   hours?: T;
   copyrightText?: T;
+  socialLinks?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -1938,6 +1959,7 @@ export interface FooterSelect<T extends boolean = true> {
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
   defaultLanguage?: T;
+  googleAnalyticsId?: T;
   devanagariFont?: T;
   updatedAt?: T;
   createdAt?: T;

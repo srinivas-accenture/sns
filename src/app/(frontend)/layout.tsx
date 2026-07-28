@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Hind, Mukta, Noto_Sans_Devanagari, Tiro_Devanagari_Marathi } from 'next/font/google'
 import { headers } from 'next/headers'
+import Script from 'next/script'
 import React from 'react'
 
 import { DEFAULT_LANGUAGE_CODE } from '@/i18n/languages'
@@ -46,9 +47,9 @@ const tiroDevanagari = Tiro_Devanagari_Marathi({
 // ── Map CMS slug → { CSS-variable class, CSS var name }
 const DEVANAGARI_FONT_MAP: Record<string, { variable: string; cssVar: string }> = {
   'noto-sans-devanagari': { variable: notoSansDevanagari.variable, cssVar: '--font-dev-noto' },
-  mukta:                  { variable: mukta.variable,              cssVar: '--font-dev-mukta' },
-  hind:                   { variable: hind.variable,               cssVar: '--font-dev-hind' },
-  'tiro-devanagari':      { variable: tiroDevanagari.variable,     cssVar: '--font-dev-tiro' },
+  mukta: { variable: mukta.variable, cssVar: '--font-dev-mukta' },
+  hind: { variable: hind.variable, cssVar: '--font-dev-hind' },
+  'tiro-devanagari': { variable: tiroDevanagari.variable, cssVar: '--font-dev-tiro' },
 }
 
 export const metadata: Metadata = {
@@ -66,11 +67,30 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
   const fontKey = siteSettings?.devanagariFont ?? 'noto-sans-devanagari'
   const fontInfo = DEVANAGARI_FONT_MAP[fontKey] ?? DEVANAGARI_FONT_MAP['noto-sans-devanagari']!
 
+  const gaId = siteSettings?.googleAnalyticsId
+
   return (
     <html lang={lang} className={fontInfo.variable}>
       <InitTheme />
       {/* Bridge: maps the specific font var to the generic --font-devanagari used in CSS */}
-      <style precedence="default" href={`devanagari-font-${fontKey}`}>{`:root { --font-devanagari: var(${fontInfo.cssVar}); }`}</style>
+      <style
+        precedence="default"
+        href={`devanagari-font-${fontKey}`}
+      >{`:root { --font-devanagari: var(${fontInfo.cssVar}); }`}</style>
+      {gaId && (
+        <>
+          <Script
+            src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+            strategy="afterInteractive"
+          />
+          <Script id="ga-init" strategy="afterInteractive">{`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${gaId}');
+          `}</Script>
+        </>
+      )}
       <body>
         <ThemeProvider>
           <LocaleProvider locale={lang as SupportedLocale}>

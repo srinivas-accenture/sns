@@ -51,6 +51,7 @@ function formatDate(dateStr: string) {
   return {
     day: d.getUTCDate(),
     month: d.toLocaleString('en-US', { month: 'short', timeZone: 'UTC' }).toUpperCase(),
+    year: d.getUTCFullYear(),
   }
 }
 
@@ -61,8 +62,8 @@ const EventTile: React.FC<{ event: EventItem }> = ({ event }) => {
   const handleCopy = () => {
     const parts: string[] = [event.title]
     if (event.date) {
-      const { day, month } = formatDate(event.date)
-      parts.push(`${day} ${month}`)
+      const { day, month, year } = formatDate(event.date)
+      parts.push(`${day} ${month} ${year}`)
     }
     if (event.time) parts.push(event.time)
     if (event.location) parts.push(event.location)
@@ -74,28 +75,40 @@ const EventTile: React.FC<{ event: EventItem }> = ({ event }) => {
     }).catch(() => {})
   }
 
-  const { day, month } = event.date ? formatDate(event.date) : { day: '—', month: '—' }
+  const { day, month, year } = event.date ? formatDate(event.date) : { day: '—', month: '—', year: '' }
   const badgeStyle = badgeColors[event.categoryColor ?? 'blue'] ?? badgeColors.blue!
 
   return (
-    <div className="flex flex-col rounded-2xl border border-border bg-card p-4 shadow-md transition-[transform,box-shadow] duration-300 fine-hover:hover:shadow-xl fine-hover:hover:-translate-y-1" style={{ height: '100%' }}>
-      {/* Top row: date + title + copy */}
-      <div className="flex items-start gap-3">
-        <div
-          className="flex shrink-0 flex-col items-center rounded-lg"
-          style={{ width: '3.25rem', background: '#1d4ed8', color: '#ffffff', padding: '0.5rem 0' }}
-        >
-          <span style={{ fontSize: '1.375rem', fontWeight: 800, lineHeight: 1 }}>{day}</span>
-          <span style={{ fontSize: '0.65rem', fontWeight: 600, letterSpacing: '0.05em', opacity: 0.9, marginTop: '0.125rem' }}>{month}</span>
+    <div
+      className="rounded-2xl border border-border bg-card shadow-sm transition-[transform,box-shadow] duration-300 fine-hover:hover:shadow-lg fine-hover:hover:-translate-y-0.5"
+      style={{ display: 'flex', flexDirection: 'column', padding: '1rem', height: '100%' }}
+    >
+      {/* Top: date badge + title/description + copy */}
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
+        {/* Date badge */}
+        <div style={{
+          display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0,
+          width: '3.25rem', background: '#1d4ed8', color: '#ffffff',
+          borderRadius: '0.5rem', padding: '0.4rem 0.25rem',
+        }}>
+          <span style={{ fontSize: '1.5rem', fontWeight: 800, lineHeight: 1 }}>{day}</span>
+          <span style={{ fontSize: '0.625rem', fontWeight: 700, letterSpacing: '0.08em', marginTop: '0.1rem' }}>{month}</span>
+          <span style={{ fontSize: '0.55rem', fontWeight: 500, opacity: 0.7, marginTop: '0.15rem', letterSpacing: '0.04em' }}>{year}</span>
         </div>
 
-        <div className="flex-1 min-w-0">
-          <p className="font-semibold text-foreground leading-snug">{event.title}</p>
+        {/* Title + description */}
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <p style={{ fontWeight: 600, lineHeight: 1.35, fontSize: '0.9375rem' }} className="text-foreground">
+            {event.title}
+          </p>
           {event.description && (
-            <p className="mt-0.5 text-sm text-muted-foreground leading-snug line-clamp-2">{event.description}</p>
+            <p style={{ fontSize: '0.8125rem', marginTop: '0.25rem', lineHeight: 1.45 }} className="text-muted-foreground line-clamp-2">
+              {event.description}
+            </p>
           )}
         </div>
 
+        {/* Copy button */}
         <button
           type="button"
           onClick={handleCopy}
@@ -107,31 +120,31 @@ const EventTile: React.FC<{ event: EventItem }> = ({ event }) => {
         </button>
       </div>
 
-      {/* Bottom row: meta + badge */}
-      <div className="mt-3 flex items-center justify-between" style={{ gap: '0.5rem' }}>
-        <div className="flex flex-wrap items-center text-xs text-muted-foreground" style={{ gap: '0.6rem' }}>
+      {/* Divider */}
+      <div style={{ height: '1px', background: 'var(--border)', margin: '0.75rem 0' }} />
+
+      {/* Footer: time/location stacked + badge */}
+      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '0.5rem', marginTop: 'auto' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem', fontSize: '0.75rem' }} className="text-muted-foreground">
           {event.time && (
-            <span className="flex items-center gap-1">
-              <ClockIcon />
-              {event.time}
+            <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+              <ClockIcon />{event.time}
             </span>
           )}
-
           {event.location && (
             event.mapUrl ? (
               <a
                 href={event.mapUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1 hover:text-foreground transition-colors"
+                style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}
+                className="hover:text-foreground transition-colors"
               >
-                <MapPinIcon />
-                {event.location}
+                <MapPinIcon />{event.location}
               </a>
             ) : (
-              <span className="flex items-center gap-1">
-                <MapPinIcon />
-                {event.location}
+              <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                <MapPinIcon />{event.location}
               </span>
             )
           )}
@@ -139,8 +152,7 @@ const EventTile: React.FC<{ event: EventItem }> = ({ event }) => {
 
         {event.category && (
           <span
-            className="rounded-full font-semibold whitespace-nowrap shrink-0"
-            style={{ ...badgeStyle, padding: '0.25rem 0.75rem', fontSize: '0.7rem' }}
+            style={{ ...badgeStyle, padding: '0.25rem 0.75rem', fontSize: '0.7rem', borderRadius: '100px', fontWeight: 600, whiteSpace: 'nowrap', flexShrink: 0 }}
           >
             {event.category}
           </span>

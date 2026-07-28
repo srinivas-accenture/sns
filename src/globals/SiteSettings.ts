@@ -31,6 +31,15 @@ export const SiteSettings: GlobalConfig = {
       },
     },
     {
+      name: 'googleAnalyticsId',
+      type: 'text',
+      label: 'Google Analytics Measurement ID',
+      admin: {
+        description: 'e.g. G-XXXXXXXXXX — leave blank to disable analytics.',
+        placeholder: 'G-XXXXXXXXXX',
+      },
+    },
+    {
       name: 'devanagariFont',
       type: 'select',
       label: 'Devanagari Font',
