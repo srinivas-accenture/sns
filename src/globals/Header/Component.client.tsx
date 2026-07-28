@@ -3,7 +3,7 @@
 import { useHeaderTheme } from '@/providers/HeaderTheme'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import type { Header, Media } from '@/payload-types'
 
@@ -33,6 +33,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
   const { headerTheme, setHeaderTheme } = useHeaderTheme()
   const pathname = usePathname()
   const locale = pathname.split('/')[1] || 'en'
+  const headerRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
     setHeaderTheme(null)
@@ -47,11 +48,23 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  useEffect(() => {
+    if (!mobileOpen) return
+    const handler = (e: MouseEvent) => {
+      if (headerRef.current && !headerRef.current.contains(e.target as Node)) {
+        setMobileOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [mobileOpen])
+
   const bgColor = data.backgroundColor || '#3C1500'
   const logoMedia = data?.logo && typeof data.logo === 'object' ? (data.logo as Media) : null
 
   return (
     <header
+      ref={headerRef}
       suppressHydrationWarning
       className={cn(
         'sticky top-0 z-50 w-full transition-all duration-300',
@@ -65,7 +78,11 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
       {/* ── Main bar ── */}
       <div className="container flex h-20 items-center gap-4">
         {/* Logo + optional site name text */}
-        <Link href={`/${locale}`} className="flex items-center gap-3 shrink-0 mr-4" aria-label="Home">
+        <Link
+          href={`/${locale}`}
+          className="flex items-center gap-3 shrink-0 mr-4"
+          aria-label="Home"
+        >
           {logoMedia?.url ? (
             <img
               src={logoMedia.url}

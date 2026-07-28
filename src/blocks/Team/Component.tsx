@@ -79,74 +79,77 @@ function MainMemberCard({ member, index }: { member: Member; index: number }) {
   const hasBioOrLinks = member.bio || (member.socialLinks && member.socialLinks.length > 0)
 
   return (
-    <div className="team-main-card" data-color={colorIndex}>
-      <div className={cn('team-main-card-inner', flipped && 'is-flipped')}>
-        {/* Front — large portrait photo */}
-        <button
-          type="button"
-          className="team-main-card-face team-main-card-front"
-          onClick={() => hasBioOrLinks && setFlipped(true)}
-          aria-label={hasBioOrLinks ? `View bio for ${name}` : name}
-          style={!hasBioOrLinks ? { cursor: 'default' } : undefined}
-        >
-          <div className="team-main-photo">
-            {member.photo ? (
-              <Media resource={member.photo} imgClassName="h-full w-full object-cover object-top" />
-            ) : (
-              <div className="team-main-avatar"><UserAvatarPlaceholder /></div>
-            )}
-          </div>
-          <div className="team-main-overlay">
-            <p className="team-main-member-name">{name}</p>
-            {member.role && <p className="team-main-member-role">{member.role}</p>}
-            {hasBioOrLinks && <span className="team-main-hint">Tap to learn more →</span>}
-          </div>
-        </button>
-
-        {/* Back — bio + social */}
-        <div className="team-main-card-face team-main-card-back" aria-hidden={!flipped}>
-          <div className="team-card-accent" />
-          <p className="font-bold text-foreground text-base leading-tight">{name}</p>
-          {member.role && <p className="team-role-back">{member.role}</p>}
-
-          {member.bio ? (
-            <p className="text-sm text-muted-foreground leading-relaxed flex-1 overflow-auto mt-1">
-              {member.bio}
-            </p>
+    <>
+      {/* Mobile — compact horizontal card */}
+      <div className="team-mobile-card">
+        <div style={{ width: '3.5rem', height: '3.5rem', borderRadius: '0.5rem', overflow: 'hidden', flexShrink: 0, background: '#f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          {member.photo ? (
+            <Media resource={member.photo} imgClassName="h-full w-full object-cover object-top" />
           ) : (
-            <p className="text-sm text-muted-foreground/50 italic flex-1 mt-1">No bio available.</p>
+            <UserAvatarPlaceholder />
           )}
-
-          {member.socialLinks && member.socialLinks.length > 0 && (
-            <div className="mt-4 flex gap-3 flex-wrap">
-              {member.socialLinks.map((link, j) => {
-                const Icon = SocialIcon[link.platform ?? ''] ?? SocialIcon['website']!
-                return (
-                  <a
-                    key={j}
-                    href={link.url ?? '#'}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title={socialLabel[link.platform ?? ''] ?? link.platform ?? ''}
-                    className="team-social-link"
-                  >
-                    {Icon && <Icon />}
-                  </a>
-                )
-              })}
-            </div>
-          )}
-
-          <button
-            type="button"
-            onClick={() => setFlipped(false)}
-            className="mt-3 text-xs text-muted-foreground/50 hover:text-muted-foreground transition-colors self-end italic cursor-pointer bg-transparent border-0 p-0"
-          >
-            ← Back
-          </button>
+        </div>
+        <div style={{ minWidth: 0 }}>
+          <p style={{ fontWeight: 600, fontSize: '0.9rem', lineHeight: 1.3, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} className="text-foreground">{name}</p>
+          {member.role && <p style={{ fontSize: '0.75rem', marginTop: '0.125rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} className="text-muted-foreground">{member.role}</p>}
         </div>
       </div>
-    </div>
+
+      {/* Desktop — flip card */}
+      <div className="team-desktop-card team-main-card" data-color={colorIndex}>
+        <div className={cn('team-main-card-inner', flipped && 'is-flipped')}>
+          <button
+            type="button"
+            className="team-main-card-face team-main-card-front"
+            onClick={() => hasBioOrLinks && setFlipped(true)}
+            aria-label={hasBioOrLinks ? `View bio for ${name}` : name}
+            style={!hasBioOrLinks ? { cursor: 'default' } : undefined}
+          >
+            <div className="team-main-photo">
+              {member.photo ? (
+                <Media resource={member.photo} imgClassName="h-full w-full object-cover object-top" />
+              ) : (
+                <div className="team-main-avatar"><UserAvatarPlaceholder /></div>
+              )}
+            </div>
+            <div className="team-main-overlay">
+              <p className="team-main-member-name">{name}</p>
+              {member.role && <p className="team-main-member-role">{member.role}</p>}
+              {hasBioOrLinks && <span className="team-main-hint">Tap to learn more →</span>}
+            </div>
+          </button>
+
+          <div className="team-main-card-face team-main-card-back" aria-hidden={!flipped}>
+            <div className="team-card-accent" />
+            <p className="font-bold text-foreground text-base leading-tight">{name}</p>
+            {member.role && <p className="team-role-back">{member.role}</p>}
+            {member.bio ? (
+              <p className="text-sm text-muted-foreground leading-relaxed flex-1 overflow-auto mt-1">{member.bio}</p>
+            ) : (
+              <p className="text-sm text-muted-foreground/50 italic flex-1 mt-1">No bio available.</p>
+            )}
+            {member.socialLinks && member.socialLinks.length > 0 && (
+              <div className="mt-4 flex gap-3 flex-wrap">
+                {member.socialLinks.map((link, j) => {
+                  const Icon = SocialIcon[link.platform ?? ''] ?? SocialIcon['website']!
+                  return (
+                    <a key={j} href={link.url ?? '#'} target="_blank" rel="noopener noreferrer"
+                      title={socialLabel[link.platform ?? ''] ?? link.platform ?? ''}
+                      className="team-social-link">
+                      {Icon && <Icon />}
+                    </a>
+                  )
+                })}
+              </div>
+            )}
+            <button type="button" onClick={() => setFlipped(false)}
+              className="mt-3 text-xs text-muted-foreground/50 hover:text-muted-foreground transition-colors self-end italic cursor-pointer bg-transparent border-0 p-0">
+              ← Back
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
   )
 }
 
@@ -165,50 +168,56 @@ function PrimaryMemberCard({ member }: { member: Member }) {
   const name = member.name ?? ''
 
   return (
-    <div
-      className="rounded-2xl border border-border bg-card shadow-sm transition-shadow duration-200 fine-hover:hover:shadow-md"
-      style={{ display: 'flex', flexDirection: 'column', padding: '0.75rem' }}
-    >
-      {/* Photo / avatar — square, 50% shorter than a portrait */}
-      <div style={{ position: 'relative', aspectRatio: '5 / 3', background: '#f3f4f6', borderRadius: '0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-        {member.photo ? (
-          <Media
-            resource={member.photo}
-            imgClassName="absolute inset-0 w-full h-full object-cover object-top"
-            htmlElement={null}
-          />
-        ) : (
-          <UserAvatarPlaceholder />
-        )}
+    <>
+      {/* Mobile — compact horizontal card */}
+      <div className="team-mobile-card">
+        <div style={{ width: '3.5rem', height: '3.5rem', borderRadius: '0.5rem', overflow: 'hidden', flexShrink: 0, background: '#f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          {member.photo ? (
+            <Media resource={member.photo} imgClassName="h-full w-full object-cover object-top" />
+          ) : (
+            <UserAvatarPlaceholder />
+          )}
+        </div>
+        <div style={{ minWidth: 0 }}>
+          <p style={{ fontWeight: 600, fontSize: '0.9rem', lineHeight: 1.3, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} className="text-foreground">{name}</p>
+          {member.role && <p style={{ fontSize: '0.75rem', marginTop: '0.125rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} className="text-muted-foreground">{member.role}</p>}
+        </div>
       </div>
 
-      {/* Info */}
-      <div style={{ paddingTop: '0.625rem', flexGrow: 1, textAlign: 'center' }}>
-        <p style={{ fontWeight: 600, fontSize: '0.875rem', lineHeight: 1.3 }} className="text-foreground">{name}</p>
-        {member.role && (
-          <p style={{ fontSize: '0.75rem', marginTop: '0.125rem' }} className="text-muted-foreground">{member.role}</p>
-        )}
-        {member.socialLinks && member.socialLinks.length > 0 && (
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginTop: '0.5rem' }}>
-            {member.socialLinks.map((link, j) => {
-              const Icon = SocialIcon[link.platform ?? ''] ?? SocialIcon['website']!
-              return (
-                <a
-                  key={j}
-                  href={link.url ?? '#'}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title={socialLabel[link.platform ?? ''] ?? link.platform ?? ''}
-                  className="team-social-link"
-                >
-                  {Icon && <Icon />}
-                </a>
-              )
-            })}
-          </div>
-        )}
+      {/* Desktop — portrait card */}
+      <div
+        className="team-desktop-card rounded-2xl border border-border bg-card shadow-sm transition-shadow duration-200 fine-hover:hover:shadow-md"
+        style={{ flexDirection: 'column', padding: '0.75rem' }}
+      >
+        <div style={{ position: 'relative', aspectRatio: '5 / 3', background: '#f3f4f6', borderRadius: '0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+          {member.photo ? (
+            <Media resource={member.photo} imgClassName="absolute inset-0 w-full h-full object-cover object-top" htmlElement={null} />
+          ) : (
+            <UserAvatarPlaceholder />
+          )}
+        </div>
+        <div style={{ paddingTop: '0.625rem', flexGrow: 1, textAlign: 'center' }}>
+          <p style={{ fontWeight: 600, fontSize: '0.875rem', lineHeight: 1.3 }} className="text-foreground">{name}</p>
+          {member.role && (
+            <p style={{ fontSize: '0.75rem', marginTop: '0.125rem' }} className="text-muted-foreground">{member.role}</p>
+          )}
+          {member.socialLinks && member.socialLinks.length > 0 && (
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginTop: '0.5rem' }}>
+              {member.socialLinks.map((link, j) => {
+                const Icon = SocialIcon[link.platform ?? ''] ?? SocialIcon['website']!
+                return (
+                  <a key={j} href={link.url ?? '#'} target="_blank" rel="noopener noreferrer"
+                    title={socialLabel[link.platform ?? ''] ?? link.platform ?? ''}
+                    className="team-social-link">
+                    {Icon && <Icon />}
+                  </a>
+                )
+              })}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 
@@ -249,7 +258,7 @@ export const TeamBlock: React.FC<Props> = (props) => {
       )}
 
       {isPrimary ? (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem' }}>
+        <div className="team-primary-grid">
           {members.map((member, i) => (
             <AnimateIn key={member.id ?? i} variant="fade-up" delay={Math.min(i, 7) * 80}>
               <PrimaryMemberCard member={member} />
@@ -257,8 +266,8 @@ export const TeamBlock: React.FC<Props> = (props) => {
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {members.slice(0, 4).map((member, i) => (
+        <div className="team-default-grid">
+          {members.map((member, i) => (
             <AnimateIn key={member.id ?? i} variant="fade-up" delay={i * 120}>
               <MainMemberCard member={member} index={i} />
             </AnimateIn>

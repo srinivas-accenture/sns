@@ -6,7 +6,7 @@ import { ChevronLeft, ChevronRight, X, Play } from 'lucide-react'
 import { CMSLink } from '@/components/Link'
 import { cn } from '@/utilities/ui'
 
-type GalleryImage = NonNullable<GalleryBlockProps['images']>[0]
+type GalleryImage = NonNullable<GalleryBlockProps['images']>[0] & { instagramUrl?: string | null }
 type Props = GalleryBlockProps & { className?: string }
 
 const THUMB_W = 220
@@ -37,26 +37,51 @@ function getInstagramPostId(url: string): string | null {
 function InstagramThumbnail({ caption }: { caption?: string | null }) {
   return (
     <>
-      <div style={{
-        width: '100%', height: '100%',
-        background: 'linear-gradient(135deg, #833AB4 0%, #FD1D1D 50%, #FCAF45 100%)',
-        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 10,
-      }}>
+      <div
+        style={{
+          width: '100%',
+          height: '100%',
+          background: 'linear-gradient(135deg, #833AB4 0%, #FD1D1D 50%, #FCAF45 100%)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 10,
+        }}
+      >
         {/* Instagram logo */}
-        <svg viewBox="0 0 24 24" width={40} height={40} fill="none" stroke="#fff" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+        <svg
+          viewBox="0 0 24 24"
+          width={40}
+          height={40}
+          fill="none"
+          stroke="#fff"
+          strokeWidth={1.5}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
           <circle cx="12" cy="12" r="4" />
           <circle cx="17.5" cy="6.5" r="1" fill="#fff" stroke="none" />
         </svg>
         <Play size={28} color="#fff" fill="#fff" />
       </div>
-      <div style={{
-        position: 'absolute', bottom: 0, left: 0, right: 0,
-        background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, transparent 100%)',
-        padding: '40px 14px 14px', pointerEvents: 'none',
-      }}>
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          background:
+            'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, transparent 100%)',
+          padding: '40px 14px 14px',
+          pointerEvents: 'none',
+        }}
+      >
         {caption && (
-          <p style={{ margin: 0, color: '#fff', fontSize: 13, fontWeight: 500, lineHeight: 1.4 }}>{caption}</p>
+          <p style={{ margin: 0, color: '#fff', fontSize: 13, fontWeight: 500, lineHeight: 1.4 }}>
+            {caption}
+          </p>
         )}
       </div>
     </>
@@ -86,10 +111,18 @@ export const GalleryBlock: React.FC<Props> = ({
     el.scrollBy({ left: dir * (THUMB_W + 12), behavior: 'smooth' })
   }
 
-  function openAt(i: number) { setActive(i) }
-  function close() { setActive(null) }
-  function prev() { setActive(i => i !== null ? (i - 1 + count) % count : null) }
-  function next() { setActive(i => i !== null ? (i + 1) % count : null) }
+  function openAt(i: number) {
+    setActive(i)
+  }
+  function close() {
+    setActive(null)
+  }
+  function prev() {
+    setActive((i) => (i !== null ? (i - 1 + count) % count : null))
+  }
+  function next() {
+    setActive((i) => (i !== null ? (i + 1) % count : null))
+  }
 
   useEffect(() => {
     if (active === null) return
@@ -97,8 +130,8 @@ export const GalleryBlock: React.FC<Props> = ({
     document.body.style.overflow = 'hidden'
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setActive(null)
-      if (e.key === 'ArrowLeft') setActive(i => i !== null ? (i - 1 + count) % count : null)
-      if (e.key === 'ArrowRight') setActive(i => i !== null ? (i + 1) % count : null)
+      if (e.key === 'ArrowLeft') setActive((i) => (i !== null ? (i - 1 + count) % count : null))
+      if (e.key === 'ArrowRight') setActive((i) => (i !== null ? (i + 1) % count : null))
     }
     window.addEventListener('keydown', onKey)
     return () => {
@@ -131,10 +164,21 @@ export const GalleryBlock: React.FC<Props> = ({
             onClick={() => scroll(-1)}
             aria-label="Scroll left"
             style={{
-              position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)',
-              zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center',
-              width: 40, height: 40, borderRadius: '50%',
-              background: 'rgba(0,0,0,0.55)', color: '#fff', border: 'none', cursor: 'pointer',
+              position: 'absolute',
+              left: 12,
+              top: '50%',
+              transform: 'translateY(-50%)',
+              zIndex: 10,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 40,
+              height: 40,
+              borderRadius: '50%',
+              background: 'rgba(0,0,0,0.55)',
+              color: '#fff',
+              border: 'none',
+              cursor: 'pointer',
               backdropFilter: 'blur(4px)',
             }}
           >
@@ -154,7 +198,7 @@ export const GalleryBlock: React.FC<Props> = ({
             }}
           >
             {items.map((item, i) => {
-              const igUrl = item.instagramUrl
+              const igUrl = (item as GalleryImage).instagramUrl
               const src = getUrl(item.image)
               const video = isVideo(item.image)
               return (
@@ -185,9 +229,24 @@ export const GalleryBlock: React.FC<Props> = ({
                           playsInline
                           preload="metadata"
                           className="transition-transform duration-500 group-hover:scale-110"
-                          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', pointerEvents: 'none' }}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                            display: 'block',
+                            pointerEvents: 'none',
+                          }}
                         />
-                        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.25)' }}>
+                        <div
+                          style={{
+                            position: 'absolute',
+                            inset: 0,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            background: 'rgba(0,0,0,0.25)',
+                          }}
+                        >
                           <Play size={36} color="#fff" fill="#fff" />
                         </div>
                       </>
@@ -196,7 +255,12 @@ export const GalleryBlock: React.FC<Props> = ({
                         src={src}
                         alt={getAlt(item)}
                         className="transition-transform duration-500 group-hover:scale-110"
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          display: 'block',
+                        }}
                         loading="lazy"
                         decoding="async"
                       />
@@ -207,14 +271,28 @@ export const GalleryBlock: React.FC<Props> = ({
 
                   {/* Gradient overlay for media items */}
                   {!igUrl && (
-                    <div style={{
-                      position: 'absolute', bottom: 0, left: 0, right: 0,
-                      background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, transparent 100%)',
-                      padding: '40px 14px 14px',
-                      pointerEvents: 'none',
-                    }}>
+                    <div
+                      style={{
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        background:
+                          'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, transparent 100%)',
+                        padding: '40px 14px 14px',
+                        pointerEvents: 'none',
+                      }}
+                    >
                       {item.caption && (
-                        <p style={{ margin: 0, color: '#fff', fontSize: 13, fontWeight: 500, lineHeight: 1.4 }}>
+                        <p
+                          style={{
+                            margin: 0,
+                            color: '#fff',
+                            fontSize: 13,
+                            fontWeight: 500,
+                            lineHeight: 1.4,
+                          }}
+                        >
                           {item.caption}
                         </p>
                       )}
@@ -231,10 +309,21 @@ export const GalleryBlock: React.FC<Props> = ({
             onClick={() => scroll(1)}
             aria-label="Scroll right"
             style={{
-              position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)',
-              zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center',
-              width: 40, height: 40, borderRadius: '50%',
-              background: 'rgba(0,0,0,0.55)', color: '#fff', border: 'none', cursor: 'pointer',
+              position: 'absolute',
+              right: 12,
+              top: '50%',
+              transform: 'translateY(-50%)',
+              zIndex: 10,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 40,
+              height: 40,
+              borderRadius: '50%',
+              background: 'rgba(0,0,0,0.55)',
+              color: '#fff',
+              border: 'none',
+              cursor: 'pointer',
               backdropFilter: 'blur(4px)',
             }}
           >
@@ -246,7 +335,9 @@ export const GalleryBlock: React.FC<Props> = ({
         {hasCta && (
           <div
             className="cms-bg w-full"
-            style={{ '--cms-bg': backgroundColor || '#3C1500', padding: '2rem 0' } as React.CSSProperties}
+            style={
+              { '--cms-bg': backgroundColor || '#3C1500', padding: '2rem 0' } as React.CSSProperties
+            }
           >
             <div className="container flex flex-col items-center gap-6 text-center">
               <h3
@@ -256,11 +347,7 @@ export const GalleryBlock: React.FC<Props> = ({
                 {ctaTitle}
               </h3>
               {ctaLink?.label && (
-                <CMSLink
-                  {...ctaLink}
-                  appearance="outline"
-                  className="cta-strip-btn"
-                />
+                <CMSLink {...ctaLink} appearance="outline" className="cta-strip-btn" />
               )}
             </div>
           </div>
@@ -268,133 +355,224 @@ export const GalleryBlock: React.FC<Props> = ({
       </div>
 
       {/* ── Lightbox ──────────────────────────────────────────────────────────── */}
-      {active !== null && (() => {
-        const item = items[active]
-        const src = getUrl(item?.image)
-        const video = isVideo(item?.image)
-        return (
-          <div
-            style={{
-              position: 'fixed', inset: 0, zIndex: 9999,
-              background: 'rgba(0,0,0,0.92)',
-              display: 'flex', flexDirection: 'column',
-            }}
-            onClick={close}
-          >
-            {/* Top bar */}
+      {active !== null &&
+        (() => {
+          const item = items[active]
+          const src = getUrl(item?.image)
+          const video = isVideo(item?.image)
+          return (
             <div
-              style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 20px', flexShrink: 0 }}
-              onClick={e => e.stopPropagation()}
+              style={{
+                position: 'fixed',
+                inset: 0,
+                zIndex: 9999,
+                background: 'rgba(0,0,0,0.92)',
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+              onClick={close}
             >
-              <span style={{ color: 'rgba(255,255,255,0.55)', fontSize: 14, fontVariantNumeric: 'tabular-nums' }}>
-                {active + 1} / {count}
-              </span>
-              <button
-                type="button"
-                onClick={close}
-                aria-label="Close"
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 36, height: 36, borderRadius: '50%', background: 'rgba(255,255,255,0.12)', border: 'none', color: '#fff', cursor: 'pointer' }}
+              {/* Top bar */}
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '12px 20px',
+                  flexShrink: 0,
+                }}
+                onClick={(e) => e.stopPropagation()}
               >
-                <X size={18} />
-              </button>
-            </div>
-
-            {/* Media area */}
-            <div
-              style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden', padding: '0 60px' }}
-              onClick={e => e.stopPropagation()}
-            >
-              {/* Prev */}
-              {count > 1 && (
+                <span
+                  style={{
+                    color: 'rgba(255,255,255,0.55)',
+                    fontSize: 14,
+                    fontVariantNumeric: 'tabular-nums',
+                  }}
+                >
+                  {active + 1} / {count}
+                </span>
                 <button
                   type="button"
-                  onClick={prev}
-                  aria-label="Previous"
-                  style={{ position: 'absolute', left: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,0.12)', border: 'none', color: '#fff', cursor: 'pointer' }}
+                  onClick={close}
+                  aria-label="Close"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: 36,
+                    height: 36,
+                    borderRadius: '50%',
+                    background: 'rgba(255,255,255,0.12)',
+                    border: 'none',
+                    color: '#fff',
+                    cursor: 'pointer',
+                  }}
                 >
-                  <ChevronLeft size={26} />
+                  <X size={18} />
                 </button>
-              )}
+              </div>
 
-              {(() => {
-                const igUrl = item.instagramUrl
-                if (igUrl) {
-                  const postId = getInstagramPostId(igUrl)
-                  return postId ? (
-                    <iframe
-                      src={`https://www.instagram.com/p/${postId}/embed/`}
-                      style={{ width: 400, height: 480, maxWidth: '90vw', maxHeight: '78vh', borderRadius: 8, border: 'none', background: '#fff' }}
-                      allowFullScreen
-                      scrolling="no"
-                      onClick={e => e.stopPropagation()}
-                    />
+              {/* Media area */}
+              <div
+                style={{
+                  flex: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  padding: '0 60px',
+                }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Prev */}
+                {count > 1 && (
+                  <button
+                    type="button"
+                    onClick={prev}
+                    aria-label="Previous"
+                    style={{
+                      position: 'absolute',
+                      left: 8,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: 44,
+                      height: 44,
+                      borderRadius: '50%',
+                      background: 'rgba(255,255,255,0.12)',
+                      border: 'none',
+                      color: '#fff',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <ChevronLeft size={26} />
+                  </button>
+                )}
+
+                {(() => {
+                  const igUrl = (item as GalleryImage).instagramUrl
+                  if (igUrl) {
+                    const postId = getInstagramPostId(igUrl)
+                    return postId ? (
+                      <iframe
+                        src={`https://www.instagram.com/p/${postId}/embed/`}
+                        style={{
+                          width: 400,
+                          height: 480,
+                          maxWidth: '90vw',
+                          maxHeight: '78vh',
+                          borderRadius: 8,
+                          border: 'none',
+                          background: '#fff',
+                        }}
+                        allowFullScreen
+                        scrolling="no"
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                    ) : null
+                  }
+                  return src ? (
+                    video ? (
+                      <video
+                        src={src}
+                        controls
+                        autoPlay
+                        style={{
+                          maxWidth: '90vw',
+                          maxHeight: '78vh',
+                          borderRadius: 8,
+                          background: '#000',
+                        }}
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                    ) : (
+                      <img
+                        src={src}
+                        alt={getAlt(item)}
+                        style={{
+                          maxWidth: '90vw',
+                          maxHeight: '78vh',
+                          objectFit: 'contain',
+                          borderRadius: 8,
+                          display: 'block',
+                        }}
+                      />
+                    )
                   ) : null
-                }
-                return src ? (
-                  video ? (
-                    <video
-                      src={src}
-                      controls
-                      autoPlay
-                      style={{ maxWidth: '90vw', maxHeight: '78vh', borderRadius: 8, background: '#000' }}
-                      onClick={e => e.stopPropagation()}
-                    />
-                  ) : (
-                    <img
-                      src={src}
-                      alt={getAlt(item)}
-                      style={{ maxWidth: '90vw', maxHeight: '78vh', objectFit: 'contain', borderRadius: 8, display: 'block' }}
-                    />
-                  )
-                ) : null
-              })()}
+                })()}
 
-              {/* Next */}
-              {count > 1 && (
-                <button
-                  type="button"
-                  onClick={next}
-                  aria-label="Next"
-                  style={{ position: 'absolute', right: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,0.12)', border: 'none', color: '#fff', cursor: 'pointer' }}
-                >
-                  <ChevronRight size={26} />
-                </button>
-              )}
-            </div>
+                {/* Next */}
+                {count > 1 && (
+                  <button
+                    type="button"
+                    onClick={next}
+                    aria-label="Next"
+                    style={{
+                      position: 'absolute',
+                      right: 8,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: 44,
+                      height: 44,
+                      borderRadius: '50%',
+                      background: 'rgba(255,255,255,0.12)',
+                      border: 'none',
+                      color: '#fff',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <ChevronRight size={26} />
+                  </button>
+                )}
+              </div>
 
-            {/* Caption / dots */}
-            <div
-              style={{ flexShrink: 0, paddingBottom: 16 }}
-              onClick={e => e.stopPropagation()}
-            >
-              {item?.caption && (
-                <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.55)', fontSize: 13, marginBottom: 10, padding: '0 20px' }}>
-                  {item.caption}
-                </p>
-              )}
-              {count > 1 && (
-                <div style={{ display: 'flex', justifyContent: 'center', gap: 6 }}>
-                  {items.map((_, i) => (
-                    <button
-                      key={i}
-                      type="button"
-                      onClick={() => setActive(i)}
-                      aria-label={`Go to image ${i + 1}`}
-                      style={{
-                        height: 6, borderRadius: 3, border: 'none', cursor: 'pointer',
-                        background: i === active ? '#fff' : 'rgba(255,255,255,0.3)',
-                        width: i === active ? 20 : 6,
-                        transition: 'width 0.3s, background 0.3s',
-                        padding: 0,
-                      }}
-                    />
-                  ))}
-                </div>
-              )}
+              {/* Caption / dots */}
+              <div
+                style={{ flexShrink: 0, paddingBottom: 16 }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {item?.caption && (
+                  <p
+                    style={{
+                      textAlign: 'center',
+                      color: 'rgba(255,255,255,0.55)',
+                      fontSize: 13,
+                      marginBottom: 10,
+                      padding: '0 20px',
+                    }}
+                  >
+                    {item.caption}
+                  </p>
+                )}
+                {count > 1 && (
+                  <div style={{ display: 'flex', justifyContent: 'center', gap: 6 }}>
+                    {items.map((_, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        onClick={() => setActive(i)}
+                        aria-label={`Go to image ${i + 1}`}
+                        style={{
+                          height: 6,
+                          borderRadius: 3,
+                          border: 'none',
+                          cursor: 'pointer',
+                          background: i === active ? '#fff' : 'rgba(255,255,255,0.3)',
+                          width: i === active ? 20 : 6,
+                          transition: 'width 0.3s, background 0.3s',
+                          padding: 0,
+                        }}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        )
-      })()}
+          )
+        })()}
     </>
   )
 }
