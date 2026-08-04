@@ -54,5 +54,41 @@ export const SiteSettings: GlobalConfig = {
         description: 'Font applied to all Hindi and Marathi (Devanagari script) content.',
       },
     },
+    {
+      type: 'group',
+      name: 'seo',
+      label: 'SEO & Robots',
+      fields: [
+        {
+          name: 'sitemapUrl',
+          type: 'text',
+          label: 'Sitemap URL',
+          admin: {
+            description:
+              'Full URL to your sitemap. Included in robots.txt automatically.',
+            placeholder: 'https://www.example.com/sitemap.xml',
+          },
+        },
+        {
+          name: 'robotsDisallowPaths',
+          type: 'array',
+          label: 'Disallow Paths (robots.txt)',
+          admin: {
+            description:
+              'Paths that search engine crawlers should not access. /admin/ is always blocked automatically.',
+          },
+          fields: [
+            {
+              name: 'path',
+              type: 'text',
+              required: true,
+              admin: {
+                placeholder: '/secret-page/',
+              },
+            },
+          ],
+        },
+      ],
+    },
   ],
 }

@@ -97,6 +97,30 @@ export default buildConfig({
       tabbedUI: true,
       generateTitle,
       generateURL,
+      fields: ({ defaultFields }) => [
+        ...defaultFields,
+        {
+          name: 'keywords',
+          type: 'text',
+          localized: true,
+          label: 'Keywords',
+          admin: {
+            description:
+              'Comma-separated keywords (e.g. "kirtan, namaskar, swami samarth"). Helps Bing/Yahoo; ignored by Google.',
+            placeholder: 'keyword1, keyword2, keyword3',
+          },
+        },
+        {
+          name: 'noIndex',
+          type: 'checkbox',
+          label: 'Hide from search engines (noindex)',
+          defaultValue: false,
+          admin: {
+            description:
+              'When checked, adds <meta name="robots" content="noindex, nofollow"> — prevents Google/Bing from indexing this page.',
+          },
+        },
+      ],
     }),
   ],
 })

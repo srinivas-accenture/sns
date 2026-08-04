@@ -445,6 +445,14 @@ export interface Page {
      * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
      */
     image?: (number | null) | Media;
+    /**
+     * Comma-separated keywords (e.g. "kirtan, namaskar, swami samarth"). Helps Bing/Yahoo; ignored by Google.
+     */
+    keywords?: string | null;
+    /**
+     * When checked, adds <meta name="robots" content="noindex, nofollow"> — prevents Google/Bing from indexing this page.
+     */
+    noIndex?: boolean | null;
   };
   updatedAt: string;
   createdAt: string;
@@ -1352,6 +1360,8 @@ export interface PagesSelect<T extends boolean = true> {
         title?: T;
         description?: T;
         image?: T;
+        keywords?: T;
+        noIndex?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -1884,6 +1894,21 @@ export interface SiteSetting {
    * Font applied to all Hindi and Marathi (Devanagari script) content.
    */
   devanagariFont?: ('noto-sans-devanagari' | 'mukta' | 'hind' | 'tiro-devanagari') | null;
+  seo?: {
+    /**
+     * Full URL to your sitemap. Included in robots.txt automatically.
+     */
+    sitemapUrl?: string | null;
+    /**
+     * Paths that search engine crawlers should not access. /admin/ is always blocked automatically.
+     */
+    robotsDisallowPaths?:
+      | {
+          path: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1961,6 +1986,17 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   defaultLanguage?: T;
   googleAnalyticsId?: T;
   devanagariFont?: T;
+  seo?:
+    | T
+    | {
+        sitemapUrl?: T;
+        robotsDisallowPaths?:
+          | T
+          | {
+              path?: T;
+              id?: T;
+            };
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

@@ -9,6 +9,12 @@ const SITE_URL =
 
 const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME || 'SNS'
 
+// Maps locale code → OG locale string (BCP47 with territory)
+const OG_LOCALE_MAP: Record<string, string> = {
+  en: 'en_US',
+  mr: 'mr_IN',
+}
+
 type MetaImage = {
   url?: string | null
   width?: number | null
@@ -20,6 +26,8 @@ type PageMeta = {
   title?: string | null
   description?: string | null
   image?: MetaImage | string | null
+  keywords?: string | null
+  noIndex?: boolean | null
 }
 
 type Input = {
@@ -54,6 +62,16 @@ export function generatePageMeta({ pageTitle, slug, locale, meta }: Input): Meta
   const title = meta?.title || pageTitle || SITE_NAME
   const description = meta?.description || undefined
   const ogImage = resolveImage(meta?.image)
+  const keywords = meta?.keywords || undefined
+  const noIndex = meta?.noIndex === true
+
+  // og:locale — map code to BCP47 territory form; fall back to raw code
+  const ogLocale = OG_LOCALE_MAP[locale] ?? locale
+
+  // og:locale:alternate — other supported languages
+  const ogLocaleAlternates = LANGUAGES.filter((l) => l.code !== locale).map(
+    (l) => OG_LOCALE_MAP[l.code] ?? l.code,
+  )
 
   // hreflang alternates — one entry per language + x-default pointing to default locale
   const languageAlternates: Record<string, string> = {}
@@ -65,6 +83,8 @@ export function generatePageMeta({ pageTitle, slug, locale, meta }: Input): Meta
   return {
     title,
     description,
+    ...(keywords && { keywords }),
+    ...(noIndex && { robots: { index: false, follow: false } }),
     alternates: {
       canonical,
       languages: languageAlternates,
@@ -75,6 +95,8 @@ export function generatePageMeta({ pageTitle, slug, locale, meta }: Input): Meta
       url: canonical,
       siteName: SITE_NAME,
       type: 'website',
+      locale: ogLocale,
+      ...(ogLocaleAlternates.length > 0 && { alternateLocale: ogLocaleAlternates }),
       ...(ogImage && { images: [ogImage] }),
     },
     twitter: {
