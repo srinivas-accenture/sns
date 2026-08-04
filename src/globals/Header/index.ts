@@ -32,6 +32,7 @@ export const Header: GlobalConfig = {
       name: 'logoText',
       type: 'text',
       label: 'Logo Text',
+      localized: true,
       admin: {
         description: 'Optional text shown next to the logo image (e.g. "Swami Namasmarana Seva").',
       },

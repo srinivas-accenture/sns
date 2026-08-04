@@ -28,7 +28,9 @@ const SITE_URL =
 
 const generateTitle: GenerateTitle = ({ doc }) => {
   const title = doc?.title as string | undefined
-  return title ? `${title} | SNS` : 'SNS'
+  return title
+    ? `${title} | Shri Swami Samarth Namasmaran Seva (Malaysia)`
+    : 'Shri Swami Samarth Namasmaran Seva (Malaysia)'
 }
 
 const generateURL: GenerateURL = ({ doc, locale }) => {
