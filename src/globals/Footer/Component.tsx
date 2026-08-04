@@ -157,15 +157,31 @@ export async function Footer() {
               </h4>
               <nav>
                 <ul className="flex flex-col gap-2.5">
-                  {navItems.map(({ link }, i) => (
-                    <li key={i}>
-                      <CMSLink
-                        {...link}
-                        appearance="inline"
-                        className="text-sm text-white/70 transition-colors duration-150 hover:text-white"
-                      />
-                    </li>
-                  ))}
+                  {navItems.map((item, i) => {
+                    const subLinks = (item as any).subLinks || []
+                    return (
+                      <li key={i}>
+                        <CMSLink
+                          {...item.link}
+                          appearance="inline"
+                          className="text-sm text-white/70 transition-colors duration-150 hover:text-white"
+                        />
+                        {subLinks.length > 0 && (
+                          <ul className="mt-1.5 flex flex-col gap-1.5 pl-3 border-l border-white/10">
+                            {subLinks.map(({ link: subLink }: any, j: number) => (
+                              <li key={j}>
+                                <CMSLink
+                                  {...subLink}
+                                  appearance="inline"
+                                  className="text-xs text-white/50 transition-colors duration-150 hover:text-white/80"
+                                />
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </li>
+                    )
+                  })}
                 </ul>
               </nav>
             </div>

@@ -41,9 +41,20 @@ export const Header: GlobalConfig = {
       name: 'navItems',
       type: 'array',
       fields: [
-        link({
-          appearances: false,
-        }),
+        link({ appearances: false }),
+        {
+          name: 'subLinks',
+          type: 'array',
+          label: 'Sub Links',
+          maxRows: 8,
+          admin: {
+            description: 'Optional dropdown links shown under this nav item.',
+            initCollapsed: true,
+          },
+          fields: [
+            link({ appearances: false }),
+          ],
+        },
       ],
       maxRows: 6,
       admin: {

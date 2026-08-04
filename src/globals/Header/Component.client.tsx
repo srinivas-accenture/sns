@@ -102,7 +102,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
 
         {/* Desktop nav — centered, hidden on mobile */}
         <div className="hidden md:flex flex-1 justify-center">
-          <HeaderNav data={data} />
+          <HeaderNav data={data} bgColor={bgColor} />
         </div>
 
         {/* Desktop-only icons (hidden on mobile — they appear in the drawer instead) */}
@@ -134,7 +134,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
         aria-live="polite"
       >
         <div className="container space-y-1">
-          <HeaderNav data={data} mobile onLinkClick={() => setMobileOpen(false)} />
+          <HeaderNav data={data} mobile bgColor={bgColor} onLinkClick={() => setMobileOpen(false)} />
 
           {/* Utility row — locale / theme */}
           <div className="flex items-center gap-2 border-t border-white/10 pt-3 mt-1 px-1">
