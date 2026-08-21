@@ -27,6 +27,27 @@ const SITE_URL =
   process.env.VERCEL_PROJECT_PRODUCTION_URL ||
   'https://example.com'
 
+const hasSmtpConfig = Boolean(
+  process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS,
+)
+
+const emailAdapter = hasSmtpConfig
+  ? nodemailerAdapter({
+      defaultFromAddress: process.env.SMTP_FROM || 'noreply@example.com',
+      defaultFromName: process.env.SMTP_FROM_NAME || 'SNS',
+      transportOptions: {
+        host: process.env.SMTP_HOST,
+        port: Number(process.env.SMTP_PORT || 587),
+        auth: process.env.SMTP_USER
+          ? {
+              user: process.env.SMTP_USER,
+              pass: process.env.SMTP_PASS,
+            }
+          : undefined,
+      },
+    })
+  : undefined
+
 const generateTitle: GenerateTitle = ({ doc }) => {
   const title = doc?.title as string | undefined
   return title
@@ -56,18 +77,7 @@ export default buildConfig({
     defaultLocale: DEFAULT_LANGUAGE_CODE,
     fallback: true,
   },
-  email: nodemailerAdapter({
-    defaultFromAddress: process.env.SMTP_FROM || 'noreply@example.com',
-    defaultFromName: process.env.SMTP_FROM_NAME || 'SNS',
-    transportOptions: {
-      host: process.env.SMTP_HOST,
-      port: Number(process.env.SMTP_PORT || 587),
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-    },
-  }),
+  ...(emailAdapter ? { email: emailAdapter } : {}),
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
