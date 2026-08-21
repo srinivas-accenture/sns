@@ -90,6 +90,7 @@ function InstagramThumbnail({ caption }: { caption?: string | null }) {
 
 export const GalleryBlock: React.FC<Props> = ({
   title,
+  layout,
   images,
   ctaTitle,
   ctaLink,
@@ -99,7 +100,8 @@ export const GalleryBlock: React.FC<Props> = ({
   const trackRef = useRef<HTMLDivElement>(null)
   const [active, setActive] = useState<number | null>(null)
 
-  const items = (images ?? []).slice(0, MAX_ITEMS)
+  const isPageLayout = layout === 'page'
+  const items = isPageLayout ? (images ?? []) : (images ?? []).slice(0, MAX_ITEMS)
   if (!items.length) return null
 
   const count = items.length
@@ -156,44 +158,49 @@ export const GalleryBlock: React.FC<Props> = ({
           </div>
         )}
 
-        {/* Slider strip */}
-        <div style={{ position: 'relative' }}>
+        {/* Slider strip or dedicated gallery grid */}
+        <div className={isPageLayout ? 'container' : ''} style={{ position: 'relative' }}>
           {/* Left arrow */}
-          <button
-            type="button"
-            onClick={() => scroll(-1)}
-            aria-label="Scroll left"
-            style={{
-              position: 'absolute',
-              left: 12,
-              top: '50%',
-              transform: 'translateY(-50%)',
-              zIndex: 10,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: 40,
-              height: 40,
-              borderRadius: '50%',
-              background: 'rgba(0,0,0,0.55)',
-              color: '#fff',
-              border: 'none',
-              cursor: 'pointer',
-              backdropFilter: 'blur(4px)',
-            }}
-          >
-            <ChevronLeft size={22} />
-          </button>
+          {!isPageLayout && (
+            <button
+              type="button"
+              onClick={() => scroll(-1)}
+              aria-label="Scroll left"
+              style={{
+                position: 'absolute',
+                left: 12,
+                top: '50%',
+                transform: 'translateY(-50%)',
+                zIndex: 10,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 40,
+                height: 40,
+                borderRadius: '50%',
+                background: 'rgba(0,0,0,0.55)',
+                color: '#fff',
+                border: 'none',
+                cursor: 'pointer',
+                backdropFilter: 'blur(4px)',
+              }}
+            >
+              <ChevronLeft size={22} />
+            </button>
+          )}
 
           {/* Scrollable track */}
           <div
             ref={trackRef}
             className="[&::-webkit-scrollbar]:hidden"
             style={{
-              display: 'flex',
-              gap: 0,
-              overflowX: 'auto',
-              scrollSnapType: 'x mandatory',
+              display: isPageLayout ? 'grid' : 'flex',
+              gridTemplateColumns: isPageLayout
+                ? 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))'
+                : undefined,
+              gap: isPageLayout ? 16 : 0,
+              overflowX: isPageLayout ? 'visible' : 'auto',
+              scrollSnapType: isPageLayout ? undefined : 'x mandatory',
               scrollbarWidth: 'none',
             }}
           >
@@ -208,12 +215,13 @@ export const GalleryBlock: React.FC<Props> = ({
                   className="group"
                   style={{
                     flexShrink: 0,
-                    width: THUMB_W,
-                    height: THUMB_H,
+                    width: isPageLayout ? '100%' : THUMB_W,
+                    height: isPageLayout ? undefined : THUMB_H,
+                    aspectRatio: isPageLayout ? '4 / 5' : undefined,
                     borderRadius: 0,
                     overflow: 'hidden',
                     cursor: 'pointer',
-                    scrollSnapAlign: 'start',
+                    scrollSnapAlign: isPageLayout ? undefined : 'start',
                     background: '#e5e7eb',
                     position: 'relative',
                   }}
@@ -304,31 +312,33 @@ export const GalleryBlock: React.FC<Props> = ({
           </div>
 
           {/* Right arrow */}
-          <button
-            type="button"
-            onClick={() => scroll(1)}
-            aria-label="Scroll right"
-            style={{
-              position: 'absolute',
-              right: 12,
-              top: '50%',
-              transform: 'translateY(-50%)',
-              zIndex: 10,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: 40,
-              height: 40,
-              borderRadius: '50%',
-              background: 'rgba(0,0,0,0.55)',
-              color: '#fff',
-              border: 'none',
-              cursor: 'pointer',
-              backdropFilter: 'blur(4px)',
-            }}
-          >
-            <ChevronRight size={22} />
-          </button>
+          {!isPageLayout && (
+            <button
+              type="button"
+              onClick={() => scroll(1)}
+              aria-label="Scroll right"
+              style={{
+                position: 'absolute',
+                right: 12,
+                top: '50%',
+                transform: 'translateY(-50%)',
+                zIndex: 10,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 40,
+                height: 40,
+                borderRadius: '50%',
+                background: 'rgba(0,0,0,0.55)',
+                color: '#fff',
+                border: 'none',
+                cursor: 'pointer',
+                backdropFilter: 'blur(4px)',
+              }}
+            >
+              <ChevronRight size={22} />
+            </button>
+          )}
         </div>
 
         {/* CTA strip */}

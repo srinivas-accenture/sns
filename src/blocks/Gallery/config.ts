@@ -25,6 +25,7 @@ export const Gallery: Block = {
             { label: 'Carousel', value: 'carousel' },
             { label: 'Masonry', value: 'masonry' },
             { label: 'Grid', value: 'grid' },
+            { label: 'Dedicated Page', value: 'page' },
           ],
           admin: { width: '50%' },
         },
@@ -55,7 +56,8 @@ export const Gallery: Block = {
           type: 'text',
           label: 'Instagram URL',
           admin: {
-            description: 'Paste an Instagram post or reel URL (e.g. https://www.instagram.com/p/ABC123/). When set, the upload below is ignored.',
+            description:
+              'Paste an Instagram post or reel URL (e.g. https://www.instagram.com/p/ABC123/). When set, the upload below is ignored.',
             placeholder: 'https://www.instagram.com/p/...',
           },
         },
@@ -99,7 +101,8 @@ export const Gallery: Block = {
           label: 'Background Color',
           defaultValue: '#3C1500',
           admin: {
-            description: 'CSS color value for the CTA strip background (e.g. #3C1500, #1a1a2e, navy).',
+            description:
+              'CSS color value for the CTA strip background (e.g. #3C1500, #1a1a2e, navy).',
           },
         },
         link({
