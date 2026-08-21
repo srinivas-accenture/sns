@@ -8,6 +8,7 @@ import { FAQ } from '@/blocks/FAQ/config'
 import { FormBlock } from '@/blocks/Form/config'
 import { Gallery } from '@/blocks/Gallery/config'
 import { MediaBlock } from '@/blocks/MediaBlock/config'
+import { Archive } from '@/blocks/Archive/config'
 import { Slider } from '@/blocks/Slider/config'
 import { Team } from '@/blocks/Team/config'
 import { heroField } from '@/heros/config'
@@ -105,7 +106,19 @@ export const Pages: CollectionConfig = {
               name: 'layout',
               type: 'blocks',
               localized: true,
-              blocks: [ContentBlock, MediaBlock, CallToActionBlock, Slider, ContentWithImage, Team, FormBlock, Events, Gallery, FAQ],
+              blocks: [
+                ContentBlock,
+                MediaBlock,
+                CallToActionBlock,
+                Slider,
+                ContentWithImage,
+                Team,
+                FormBlock,
+                Events,
+                Gallery,
+                FAQ,
+                Archive,
+              ],
               required: false,
             },
           ],

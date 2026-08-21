@@ -71,7 +71,7 @@ export default async function Page({ params }: Props) {
   return (
     <article>
       <RenderHero hero={page.hero as any} />
-      {page.layout && <RenderBlocks blocks={page.layout as any} />}
+      {page.layout && <RenderBlocks blocks={page.layout as any} locale={locale} />}
     </article>
   )
 }

@@ -4,6 +4,7 @@ import { getPayload } from 'payload'
 import { notFound } from 'next/navigation'
 
 import config from '@/payload.config'
+import { ArchiveBlock } from '@/blocks/Archive/Component'
 import { LANGUAGES } from '@/i18n/languages'
 
 type Props = {
@@ -22,18 +23,11 @@ export default async function PostsPage({ params, searchParams }: Props) {
   if (!LANGUAGES.some((language) => language.code === locale)) notFound()
 
   const payload = await getPayload({ config: await config })
-  const [posts, categories] = await Promise.all([
-    payload.find({
-      collection: 'posts',
-      locale: locale as 'en' | 'mr',
-      draft: false,
-      depth: 1,
-      limit: 12,
-      sort: '-publishedAt',
-      where: category ? { 'categories.slug': { equals: category } } : undefined,
-    }),
-    payload.find({ collection: 'categories', locale: locale as 'en' | 'mr', limit: 100 }),
-  ])
+  const categories = await payload.find({
+    collection: 'categories',
+    locale: locale as 'en' | 'mr',
+    limit: 100,
+  })
 
   return (
     <article className="container py-16">
@@ -57,28 +51,14 @@ export default async function PostsPage({ params, searchParams }: Props) {
           </Link>
         ))}
       </nav>
-      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-        {posts.docs.map((post) => (
-          <article key={post.id} className="overflow-hidden rounded-lg border">
-            {typeof post.featuredImage === 'object' && post.featuredImage?.url && (
-              <img
-                src={post.featuredImage.url}
-                alt={post.featuredImage.alt ?? post.title}
-                className="aspect-[16/10] w-full object-cover"
-              />
-            )}
-            <div className="p-6">
-              <time dateTime={post.publishedAt ?? post.createdAt} className="text-sm opacity-70">
-                {new Date(post.publishedAt ?? post.createdAt).toLocaleDateString(locale)}
-              </time>
-              <h2 className="mt-2 text-2xl font-bold">
-                <Link href={`/${locale}/posts/${post.slug}`}>{post.title}</Link>
-              </h2>
-              {post.author && <p className="mt-2 text-sm opacity-70">By {post.author}</p>}
-            </div>
-          </article>
-        ))}
-      </div>
+      <ArchiveBlock
+        title="Latest posts"
+        collection="posts"
+        pathPrefix="posts"
+        limit={12}
+        locale={locale}
+        category={category ? (categories.docs.find((item) => item.slug === category)?.id ?? null) : null}
+      />
     </article>
   )
 }

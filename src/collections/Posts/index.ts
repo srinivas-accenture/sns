@@ -109,6 +109,14 @@ export const Posts: CollectionConfig = {
           label: 'Excerpt',
           fields: [
             {
+              name: 'intro',
+              type: 'textarea',
+              localized: true,
+              admin: {
+                description: 'Optional short introduction shown on archive cards.',
+              },
+            },
+            {
               name: 'excerpt',
               type: 'richText',
               localized: true,

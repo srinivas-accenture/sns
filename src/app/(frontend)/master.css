@@ -15,6 +15,122 @@
   background: var(--background);
 }
 
+.posts-archive {
+  padding-block: var(--section-padding-y-sm);
+}
+
+.posts-archive-title {
+  margin-bottom: 1.5rem;
+  color: var(--brand-primary);
+  font-size: var(--text-3xl);
+  font-weight: 700;
+}
+
+.posts-archive-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+.posts-archive-card {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--card);
+  box-shadow: var(--shadow-sm);
+}
+
+.posts-archive-image-link,
+.posts-archive-image-link img,
+.posts-archive-image-placeholder {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+
+.posts-archive-image-link {
+  overflow: hidden;
+}
+
+.posts-archive-image-link img {
+  object-fit: cover;
+  transition: transform 250ms var(--ease-out);
+}
+
+.posts-archive-card:hover .posts-archive-image-link img {
+  transform: scale(1.03);
+}
+
+.posts-archive-image-placeholder {
+  display: grid;
+  place-items: center;
+  color: var(--muted-foreground);
+  background: var(--brand-surface-muted);
+}
+
+.posts-archive-card-body {
+  display: flex;
+  min-height: 12rem;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.posts-archive-card-body h3 {
+  margin: 0;
+  color: var(--foreground);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.posts-archive-intro {
+  display: -webkit-box;
+  margin: 0.65rem 0 0;
+  overflow: hidden;
+  color: var(--muted-foreground);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.posts-archive-card-footer {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: auto;
+  padding-top: 1.25rem;
+}
+
+.posts-archive-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  color: var(--muted-foreground);
+  font-size: var(--text-sm);
+}
+
+.posts-archive-read-more {
+  display: inline-block;
+  flex-shrink: 0;
+  color: var(--brand-primary);
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+
+@media (min-width: 48rem) {
+  .posts-archive-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 64rem) {
+  .posts-archive-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
 .post-breadcrumbs {
   display: flex;
   align-items: center;

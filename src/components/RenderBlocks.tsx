@@ -8,6 +8,7 @@ import { FAQBlock } from '@/blocks/FAQ/Component'
 import { FormBlock } from '@/blocks/Form/Component'
 import { GalleryBlock } from '@/blocks/Gallery/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
+import { ArchiveBlock } from '@/blocks/Archive/Component'
 import { SliderBlock } from '@/blocks/Slider/Component'
 import { TeamBlock } from '@/blocks/Team/Component'
 
@@ -25,6 +26,7 @@ const blockComponents: Record<string, React.FC<any>> = {
   formBlock: FormBlock,
   gallery: GalleryBlock,
   mediaBlock: MediaBlock,
+  archive: ArchiveBlock,
   slider: SliderBlock,
   team: TeamBlock,
 }
@@ -32,9 +34,11 @@ const blockComponents: Record<string, React.FC<any>> = {
 export function RenderBlocks({
   blocks,
   headingIdsByBlock,
+  locale,
 }: {
   blocks: LayoutBlock[]
   headingIdsByBlock?: Record<number, Record<number, string[]>>
+  locale?: string
 }) {
   if (!blocks?.length) return null
 
@@ -45,7 +49,7 @@ export function RenderBlocks({
         if (!Component) return null
         return (
           <div key={i} className="block-section">
-            <Component {...block} headingIds={headingIdsByBlock?.[i]} />
+            <Component {...block} headingIds={headingIdsByBlock?.[i]} locale={locale} />
           </div>
         )
       })}

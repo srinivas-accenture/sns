@@ -438,6 +438,7 @@ export interface Page {
         | EventsBlock
         | GalleryBlock
         | FAQBlock
+        | ArchiveBlock
       )[]
     | null;
   meta?: {
@@ -1017,6 +1018,28 @@ export interface FAQBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ArchiveBlock".
+ */
+export interface ArchiveBlock {
+  title?: string | null;
+  /**
+   * Payload collection slug to list, for example posts or events.
+   */
+  collection: string;
+  /**
+   * URL prefix for each item. Leave empty for /{locale}/{slug}.
+   */
+  pathPrefix?: string | null;
+  /**
+   * Number of published items to show.
+   */
+  limit?: number | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'archive';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "posts".
  */
 export interface Post {
@@ -1027,6 +1050,10 @@ export interface Post {
   categories?: (number | Category)[] | null;
   publishedAt?: string | null;
   featuredImage?: (number | null) | Media;
+  /**
+   * Optional short introduction shown on archive cards.
+   */
+  intro?: string | null;
   excerpt?: {
     root: {
       type: string;
@@ -1505,6 +1532,7 @@ export interface PagesSelect<T extends boolean = true> {
         events?: T | EventsBlockSelect<T>;
         gallery?: T | GalleryBlockSelect<T>;
         faq?: T | FAQBlockSelect<T>;
+        archive?: T | ArchiveBlockSelect<T>;
       };
   meta?:
     | T
@@ -1717,6 +1745,18 @@ export interface FAQBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ArchiveBlock_select".
+ */
+export interface ArchiveBlockSelect<T extends boolean = true> {
+  title?: T;
+  collection?: T;
+  pathPrefix?: T;
+  limit?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "posts_select".
  */
 export interface PostsSelect<T extends boolean = true> {
@@ -1726,6 +1766,7 @@ export interface PostsSelect<T extends boolean = true> {
   categories?: T;
   publishedAt?: T;
   featuredImage?: T;
+  intro?: T;
   excerpt?: T;
   layout?:
     | T
