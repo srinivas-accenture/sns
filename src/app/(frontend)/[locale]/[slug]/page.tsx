@@ -25,9 +25,7 @@ export async function generateStaticParams() {
       select: { slug: true },
     })
 
-    return LANGUAGES.flatMap(({ code }) =>
-      result.docs.map(({ slug }) => ({ locale: code, slug })),
-    )
+    return LANGUAGES.flatMap(({ code }) => result.docs.map(({ slug }) => ({ locale: code, slug })))
   } catch {
     return []
   }

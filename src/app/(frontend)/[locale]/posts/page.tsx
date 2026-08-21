@@ -57,7 +57,9 @@ export default async function PostsPage({ params, searchParams }: Props) {
         pathPrefix="posts"
         limit={12}
         locale={locale}
-        category={category ? (categories.docs.find((item) => item.slug === category)?.id ?? null) : null}
+        category={
+          category ? (categories.docs.find((item) => item.slug === category)?.id ?? null) : null
+        }
       />
     </article>
   )
