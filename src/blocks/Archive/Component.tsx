@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { getPayload } from 'payload'
 import type { CollectionSlug } from 'payload'
+import { ArrowRight } from 'lucide-react'
 
 import config from '@/payload.config'
 import type { ArchiveBlock as ArchiveBlockProps } from '@/payload-types'
@@ -76,7 +77,8 @@ export async function ArchiveBlock({
                       )}
                     </div>
                     <Link href={href} className="posts-archive-read-more">
-                      Read more
+                      <span>Read more</span>
+                      <ArrowRight aria-hidden="true" size={16} />
                     </Link>
                   </div>
                 </div>

@@ -119,53 +119,49 @@ export default async function PostPage({ params }: Props) {
             )}
           </div>
         </div>
-        {items.length > 0 && (
+        {(items.length > 0 || related.docs.length > 0) && (
           <aside className="post-toc">
-            <nav aria-label="Table of contents">
-              <p>Table of Contents</p>
-              <ol>
-                {items.map((item) => (
-                  <li key={item.id} className={item.level > 2 ? 'pl-4' : undefined}>
-                    <a href={`#${item.id}`}>{item.label}</a>
-                  </li>
-                ))}
-              </ol>
-            </nav>
+            {items.length > 0 && (
+              <nav aria-label="Table of contents">
+                <p>Table of Contents</p>
+                <ol>
+                  {items.map((item) => (
+                    <li key={item.id} className={item.level > 2 ? 'pl-4' : undefined}>
+                      <a href={`#${item.id}`}>{item.label}</a>
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            )}
+            {related.docs.length > 0 && (
+              <section className="post-related" aria-label="Related posts">
+                <h2>Related Posts</h2>
+                <div className="post-related-list">
+                  {related.docs.map((relatedPost) => {
+                    const relatedImage =
+                      typeof relatedPost.featuredImage === 'object'
+                        ? relatedPost.featuredImage
+                        : null
+                    return (
+                      <article key={relatedPost.id} className="post-related-card">
+                        <a href={`/${locale}/posts/${relatedPost.slug}`}>
+                          {relatedImage?.url && (
+                            <img
+                              src={relatedImage.url}
+                              alt={relatedImage.alt ?? relatedPost.title}
+                            />
+                          )}
+                          <span>{relatedPost.title}</span>
+                        </a>
+                      </article>
+                    )
+                  })}
+                </div>
+              </section>
+            )}
           </aside>
         )}
       </div>
-      {related.docs.length > 0 && (
-        <section className="post-related">
-          <div className="container">
-            <div className="post-section-heading">
-              <span>Explore More</span>
-              <h2>Explore Other Stories</h2>
-            </div>
-            <div className="post-related-grid">
-              {related.docs.map((relatedPost) => {
-                const relatedImage =
-                  typeof relatedPost.featuredImage === 'object' ? relatedPost.featuredImage : null
-                return (
-                  <article key={relatedPost.id} className="post-related-card">
-                    {relatedImage?.url && (
-                      <img src={relatedImage.url} alt={relatedImage.alt ?? relatedPost.title} />
-                    )}
-                    <div>
-                      <h3>
-                        <a href={`/${locale}/posts/${relatedPost.slug}`}>{relatedPost.title}</a>
-                      </h3>
-                      <p>{relatedPost.author ?? 'SNS'}</p>
-                      <a className="post-card-link" href={`/${locale}/posts/${relatedPost.slug}`}>
-                        Read More
-                      </a>
-                    </div>
-                  </article>
-                )
-              })}
-            </div>
-          </div>
-        </section>
-      )}
     </article>
   )
 }

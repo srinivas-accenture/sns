@@ -70,21 +70,27 @@
 
 .posts-archive-card-body {
   display: flex;
-  min-height: 12rem;
+  height: 14rem;
   flex-direction: column;
   padding: 1rem;
 }
 
 .posts-archive-card-body h3 {
+  display: -webkit-box;
   margin: 0;
+  overflow: hidden;
   color: var(--foreground);
   font-size: var(--text-xl);
   font-weight: 700;
   line-height: 1.25;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  min-height: 2.5em;
 }
 
 .posts-archive-intro {
   display: -webkit-box;
+  min-height: 4.5em;
   margin: 0.65rem 0 0;
   overflow: hidden;
   color: var(--muted-foreground);
@@ -112,11 +118,22 @@
 }
 
 .posts-archive-read-more {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
   flex-shrink: 0;
   color: var(--brand-primary);
   font-size: var(--text-sm);
   font-weight: 700;
+  text-decoration: none;
+}
+
+.posts-archive-read-more svg {
+  transition: transform 200ms var(--ease-out);
+}
+
+.posts-archive-read-more:hover svg {
+  transform: translateX(0.2rem);
 }
 
 @media (min-width: 48rem) {
@@ -261,6 +278,48 @@
 
 .post-toc a:hover {
   color: var(--brand-primary);
+}
+
+.post-related {
+  margin-top: 1.5rem;
+}
+
+.post-related h2 {
+  margin: 0 0 0.75rem;
+  color: var(--brand-accent-hover);
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.post-related-list {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.post-related-card {
+  margin: 0;
+}
+
+.post-related-card a {
+  display: grid;
+  grid-template-columns: 5rem minmax(0, 1fr);
+  align-items: start;
+  gap: 0.7rem;
+  color: #0070e8;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  text-decoration: none;
+}
+
+.post-related-card img {
+  width: 5rem;
+  height: 4rem;
+  object-fit: cover;
+  border-radius: 0.15rem;
+}
+
+.post-related-card a:hover span {
+  text-decoration: underline;
 }
 
 @media (min-width: 64rem) {
