@@ -42,19 +42,36 @@ type Props = {
   data: DefaultTypedEditorState
   enableGutter?: boolean
   enableProse?: boolean
+  headingIds?: string[]
 } & React.HTMLAttributes<HTMLDivElement>
 
 export default function RichText(props: Props) {
-  const { className, enableProse = true, enableGutter = true, ...rest } = props
+  const { className, enableProse = true, enableGutter = true, headingIds, ...rest } = props
+  let headingIndex = 0
+  const converters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) => ({
+    ...defaultConverters,
+    ...(headingIds
+      ? {
+          heading: ({ node, nodesToJSX }: any) => {
+            const children = nodesToJSX({ nodes: node.children })
+            const id = headingIds[headingIndex++]
+            const Tag = node.tag
+            return <Tag id={id}>{children}</Tag>
+          },
+        }
+      : {}),
+  })
+
   return (
     <ConvertRichText
-      converters={jsxConverters}
+      converters={(args) => ({ ...jsxConverters(args), ...converters(args) })}
       className={cn(
         'payload-richtext',
         {
           container: enableGutter,
           'max-w-none': !enableGutter,
-          'mx-auto prose md:prose-md dark:prose-invert prose-headings:text-brand-primary': enableProse,
+          'mx-auto prose md:prose-md dark:prose-invert prose-headings:text-brand-primary':
+            enableProse,
         },
         className,
       )}

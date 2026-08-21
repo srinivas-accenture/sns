@@ -23,9 +23,10 @@ type Column = {
 
 type ContentBlockProps = {
   columns?: Column[]
+  headingIds?: Record<number, string[]>
 }
 
-export function ContentBlock({ columns }: ContentBlockProps) {
+export function ContentBlock({ columns, headingIds }: ContentBlockProps) {
   if (!columns?.length) return null
 
   return (
@@ -34,7 +35,7 @@ export function ContentBlock({ columns }: ContentBlockProps) {
         {columns.map((col, i) => (
           <div key={i} className={columnWidthClass[col.size ?? 'full'] ?? 'w-full'}>
             {col.richText && (
-              <RichText data={col.richText} enableGutter={false} />
+              <RichText data={col.richText} enableGutter={false} headingIds={headingIds?.[i]} />
             )}
             {col.enableLink && col.link?.label && (
               <a

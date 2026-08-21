@@ -29,7 +29,13 @@ const blockComponents: Record<string, React.FC<any>> = {
   team: TeamBlock,
 }
 
-export function RenderBlocks({ blocks }: { blocks: LayoutBlock[] }) {
+export function RenderBlocks({
+  blocks,
+  headingIdsByBlock,
+}: {
+  blocks: LayoutBlock[]
+  headingIdsByBlock?: Record<number, Record<number, string[]>>
+}) {
   if (!blocks?.length) return null
 
   return (
@@ -39,7 +45,7 @@ export function RenderBlocks({ blocks }: { blocks: LayoutBlock[] }) {
         if (!Component) return null
         return (
           <div key={i} className="block-section">
-            <Component {...block} />
+            <Component {...block} headingIds={headingIdsByBlock?.[i]} />
           </div>
         )
       })}

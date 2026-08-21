@@ -12,6 +12,7 @@ import sharp from 'sharp'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
+import { Posts } from './collections/Posts'
 import { Categories } from './collections/Categories'
 import { Footer } from './globals/Footer'
 import { Header } from './globals/Header'
@@ -33,11 +34,12 @@ const generateTitle: GenerateTitle = ({ doc }) => {
     : 'Shri Swami Samarth Namasmaran Seva (Malaysia)'
 }
 
-const generateURL: GenerateURL = ({ doc, locale }) => {
+const generateURL: GenerateURL = ({ collectionConfig, doc, locale }) => {
   const slug = doc?.slug as string | undefined
   const lang = (locale as string) || DEFAULT_LANGUAGE_CODE
   if (!slug) return SITE_URL
-  return slug === 'home' ? `${SITE_URL}/${lang}` : `${SITE_URL}/${lang}/${slug}`
+  const prefix = collectionConfig?.slug === 'posts' ? '/posts' : ''
+  return slug === 'home' ? `${SITE_URL}/${lang}` : `${SITE_URL}/${lang}${prefix}/${slug}`
 }
 
 export default buildConfig({
@@ -47,7 +49,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Pages, Categories],
+  collections: [Users, Media, Pages, Posts, Categories],
   globals: [Header, Footer, SiteSettings],
   localization: {
     locales: LANGUAGES.map(({ code, label }) => ({ code, label })),
@@ -94,7 +96,7 @@ export default buildConfig({
       },
     }),
     seoPlugin({
-      collections: ['pages'],
+      collections: ['pages', 'posts'],
       uploadsCollection: 'media',
       tabbedUI: true,
       generateTitle,
