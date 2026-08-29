@@ -113,6 +113,27 @@ export default async function PostPage({ params }: Props) {
               </div>
             )}
           </header>
+          {items.length > 0 && (
+            <details className="post-toc-mobile">
+              <summary className="post-toc-mobile-trigger">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <rect y="3" width="16" height="1.5" rx="0.75" fill="currentColor" />
+                  <rect y="7.25" width="16" height="1.5" rx="0.75" fill="currentColor" />
+                  <rect y="11.5" width="16" height="1.5" rx="0.75" fill="currentColor" />
+                </svg>
+                Table of Contents
+              </summary>
+              <nav aria-label="Table of contents">
+                <ol>
+                  {items.map((item) => (
+                    <li key={item.id} className={item.level > 2 ? 'pl-4' : undefined}>
+                      <a href={`#${item.id}`}>{item.label}</a>
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            </details>
+          )}
           <div className="post-content">
             {post.layout && (
               <RenderBlocks blocks={post.layout as any} headingIdsByBlock={headingIdsByBlock} />

@@ -280,6 +280,59 @@
   color: var(--brand-primary);
 }
 
+/* Mobile TOC — hamburger drawer */
+.post-toc-mobile {
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.post-toc-mobile-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  list-style: none;
+  cursor: pointer;
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.3rem;
+  background: var(--card);
+  color: var(--foreground);
+  font-size: 0.82rem;
+  font-weight: 600;
+  user-select: none;
+  width: fit-content;
+}
+
+.post-toc-mobile-trigger::-webkit-details-marker {
+  display: none;
+}
+
+.post-toc-mobile nav {
+  margin-top: 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 0.3rem;
+  padding: 1rem;
+  background: var(--card);
+}
+
+.post-toc-mobile ol {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding-left: 1rem;
+}
+
+.post-toc-mobile li {
+  padding-left: 0.15rem;
+  color: var(--muted-foreground);
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.post-toc-mobile a:hover {
+  color: var(--brand-primary);
+}
+
 .post-related {
   margin-top: 1.5rem;
 }
@@ -334,6 +387,10 @@
     position: sticky;
     top: calc(var(--header-height) + 1rem);
     padding-top: 0.5rem;
+  }
+
+  .post-toc-mobile {
+    display: none;
   }
 }
 
